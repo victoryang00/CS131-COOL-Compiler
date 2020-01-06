@@ -1,0 +1,269 @@
+\documentclass[10pt]{article}
+\usepackage[pdftex]{graphicx, color}
+\usepackage{listings,proof}
+
+\usepackage{tikz}
+\usetikzlibrary{automata,positioning}
+
+\headheight 8pt \headsep 20pt \footskip 30pt
+\textheight 9in \textwidth 6.5in
+\oddsidemargin 0in \evensidemargin 0in
+\topmargin -.35in
+
+\lstset{basicstyle=\small\ttfamily,breaklines=true}
+\newcommand {\pts}[1]{{\bf #1 pts}}
+\newcommand{\ttmath}[1]{$\mathtt{#1}$}
+\newcommand{\ossimple}[6]{#1,#2,#3\vdash #4 : #5,#6}
+\newcommand{\osrule}[8]{\frac{#7}{\ossimple{#1}{#2}{#3}{#4}{#5}{#6}}\eqno
+  \mbox{#8}}
+\newcommand{\infertext}[2]{\infer{{\textrm{#1}}}{#2}}
+
+\begin{document}
+\begin{center}
+\Large CS131 Compilers: Writing Assignment 3\\Due Saturday, November 23, 2019 at 23:00 pm
+\end{center}
+
+\begin{center}
+%% Change this:
+\LARGE yangyw - 2018533218
+\end{center}
+
+This assignment asks you to prepare written answers to questions on
+semantic analysis. Each of the questions has a short answer. You
+may discuss this assignment with other students and work on the problems
+together. However, your write-up should be your own individual work.
+and you should indicate in your submission who you worked with, if applicable.
+Written assignments are turned in at the start of lecture.
+You should use the Latex template provided at the course web site to write your solution.
+
+\begin{center}
+%% Change this:
+I worked with: Nobody
+\end{center}
+
+Example for type rule in tex:
+\[\infertext
+          {$O$[Bo/x][Ob/x] $\vdash$ x: Ob}
+          {\textrm{$O$[Bo/x][Ob/x](x) = Ob}}       
+\]
+
+\begin{enumerate}
+\item (10 pts) Consider the following class definitions.
+\begin{verbatim}
+  class A {
+    i: Int
+    o: Object
+    b: B <- new B
+    x: SELF_TYPE
+    f(): SELF_TYPE {x}
+  }
+  class B inherits A {
+    g(b: Bool): Object { (* EXPRESSION *) }
+  }
+\end{verbatim}
+
+Ar eassume that the type checker implements the rules described in the lectures and in the Cool Reference
+Manual. Foch of the following expressions, occurring in place of (* EXPRESSION *) in the body
+of the method \emph{g}, show the static type inferred by the type checker for the expression. If the expression
+causes a type error, give a brief explanation of why the appropriate type checking rule for the expression
+cannot be applied.
+
+\begin{enumerate}
+  \item \begin{verbatim} x \end{verbatim}
+  \item \begin{verbatim} self = x \end{verbatim}
+  \item \begin{verbatim} self = i \end{verbatim}
+  \item \begin{verbatim} let x: B <- x in x \end{verbatim}
+  \item \begin{verbatim}
+case o of
+    o: Int => b;
+    o: Bool => o;
+    o: Object => true;
+esac
+\end{verbatim}
+\end{enumerate}
+\begin{enumerate}
+\item \begin{verbatim}SELF_TYPE_{B} \end{verbatim}
+\item \begin{verbatim}bool \end{verbatim}
+\item \begin{verbatim}Error; because Int can only campared with Int, self is not Int.\end{verbatim}
+\item \begin{verbatim}B\end{verbatim}
+\item \begin{verbatim}bool\end{verbatim}
+\end{enumerate}
+\medskip
+
+\item (10 pts) Show the full type \emph{derivation tree }for the following judgement:
+(You can use Bo as the type Bool and Ob as the type Object)
+
+\begin{center}
+$O$[Bool/x] $\vdash$ \tt{x $<$- (let x:Object $<$- x in x = x): Bool}
+\end{center}
+
+\[ \infertext{$O$[Bo/x] $\vdash$ x: Bo  Bo $\leq$ Bo} {\textrm{$O$[Bo/x](x) = Bo}}
+\]
+
+\begin{equation}
+  \infertext
+    {$O$[Bo/x] $\vdash$ x: (let x:Ob $<$- x in x = x): Bo}
+		{\textrm{\infertext{$O$[Bo/x] $\vdash$ x: Bo  Bo $\leq$ Bo}{\textrm{$O$[Bo/x](x) = Bo}}\ \ \infertext{O[Bo/x] $\vdash$ let x:Ob $<$- x in x = x: Bo}{{\infertext{$O$[Bo/x] $\vdash$ x: Ob Ob $<$= Ob}{\textrm{$O$[Bo/x](x) = Bo Bo $<$= Ob}}}{\infertext{$O$[Bo/x][Ob/x] $\vdash$ x = x: Ob}{\infertext{$O$[Bo/x][Ob/x] $\vdash$ x: Ob}{\textrm{$O$[Bo/x][Ob/x](x) = Ob}}\ \ \infertext{$O$[Bo/x][Ob/x] $\vdash$ x: Ob}{\textrm{$O$[Bo/x][Ob/x](x) = Ob}}}}}}}
+\end{equation}
+
+\medskip
+\item (10 pts) Suppose we extend the grammar for Cool with a ``{\bf void}'' keyword
+\begin{eqnarray*}
+  expr & ::= & {\bf void} \\
+       & |   & ...
+\end{eqnarray*}
+
+  that is analogous to {\tt null} in Java. (Currently objects are
+  initialized to void if they have no other initializer specified, but
+  there is no general-purpose {\bf void} keyword.)  We want to be able
+  to use {\bf void} wherever an object can be used, as in
+\begin{verbatim}
+  let foo:Int <- if some_test
+                 then 5
+                 else void
+                 fi
+  in ...
+\end{verbatim}
+
+  Give a sound typing rule that we can add to the Cool specification
+  to accommodate this new keyword.
+
+  \[\infertext{
+    \textrm{ $O, M, C \vdash$ void  : T }	} 
+  {}\]
+
+\medskip
+\item  (10 pts) Suppose we extend Cool with exceptions by adding two new constructs
+to the Cool language.
+\begin{eqnarray*}
+  expr & ::= & \textit{\bf try } expr \;\textit{\bf catch } ID => expr \\
+       & |   & \textit{\bf throw } expr \\
+       & | & ...
+\end{eqnarray*}
+Here {\bf try}, {\bf catch} and {\bf throw} are three new terminals.
+  ``${\bf throw }\;\; expr$'' returns $expr$ to the
+  closest dynamically enclosing catch block.
+Note that since {\bf throw} expression returns control to a different location, we do not really
+  care about the context in which throw is used. For example,
+({\bf throw} $false) + 2$ is a valid Cool expression (However, note that
+  ({\bf throw} $false) + (2+true)$ is not a valid Cool expression).  Following is an example that uses the
+try-catch and throw constructs.
+\begin{verbatim}
+try
+   if some_test1 then throw 34
+   else if some_test2 then throw ``undefined error''
+   else do_something fi fi
+catch x =>
+  case x of
+      x:Int => do_something1
+      x:String => do_something2
+  esac
+\end{verbatim}
+
+The above program fragment executes
+  ``do\_something1'' (with $x$ bound to the value 34) if ``some\_test1''
+  evaluates to \textsf{true}. It executes ``do\_something2'' (with $x$ bound to the
+  value ``undefined error'') if ``some\_test1'' evaluates to \textsf{false} but
+  ``some\_test2'' evaluates to \textsf{true}. It executes ``do\_something'' if both
+  ``some\_test1'' and ``some\_test2'' evaluate to \textsf{false}.
+
+
+Give a set of new sound typing rules that we can add to the Cool specification
+to accommodate these two new constructs.
+
+\[\infertext
+      {$O,M,C$ $\vdash$ throw $e$ : $T_2$ }
+      {\textrm{$O,M,C$ $\vdash$ $e$ : $T_1$}
+      }
+    \]
+
+
+\[\infertext
+      {$O,M,C$ $\vdash$ \textbf{try} $e_1$ \textbf{catch} x $=>$ $e_2$ : $T_1\sqcup T_2$}
+      {\textrm{$O,M,C$ $\vdash$ $e_1$ : $T_1$\ \ \ \ \ $O[Object/Id],M,C$ $\vdash$ $e_2$ : $T_2$}
+      }
+    \]
+
+
+
+\medskip
+\item (10 pts) The Java programming language includes arrays.  The Java
+language specification states that if $s$ is an array of elements of
+class $S$, and $t$ is an array of elements of class $T$, then the
+assignment $s = t$ is allowed as long as $T$ is a subclass of $S$.
+This typing rule for array assignments turns out to be unsound. (Java
+works around the fact that this rule is not statically sound by inserting
+runtime checks to generate an exception if arrays are used
+unsafely. For this question, assume there are no special runtime checks.)
+
+Consider the following Java program, which type checks according
+to the proceeding rule:
+\begin{verbatim}
+class Mammal { String name; }
+
+class Dog extends Mammal { void beginBarking() { ... } }
+
+class Main {
+    static public void main(String argv[]) {
+        Dog x[] = new Dog[5];
+        Mammal y[] = x;
+
+        /* Insert code here */
+    }
+}
+\end{verbatim}
+Add code to the \texttt{main} method so that the resulting program is
+a valid Java program (i.e., it type checks statically and so it will
+compile), but the program could result in an error being applied
+to an inappropriate type when executed.  Include a brief explanation
+of how your program exhibits the problem.
+\begin{verbatim}
+    Dog x[] = new Dog[5];
+    Mammal y[] = x;
+
+    Mammal a_cat = new Mammal();
+    y[0] = a_cat; // xxx
+    x[0].beginBarking();
+\end{verbatim}
+\    The problem here is that arrays are not just lists of values -- they represent memory
+locations into which we can store new data.\\
+\ \    Normally we say that A $\leq$ B if objects of type A can safely be used anywhere that
+objects of type B can be used. That’s not quite true with Dog[\ ] $\leq$ Mammal[\ ], since
+a Mammal[\ ] object can be safely used on the left-hand side of the assignment marked by
+xxx, while a Dog[\ ] object cannot. Java handles this by adding a runtime check to every
+array assignment that determines whether the right-hand side of the assignment matches
+the dynamic type of the array.
+\medskip
+\item (10 pts) Now that you know why Java arrays are problematic, you decide to add an array construct
+to Cool with sound typing rules. An array containing objects of type A is declared as being of type
+\textsf{Array(A)} and one can create arrays in Cool using the \textsf{new Array[A][e]} construct, where \textsf{e} is an
+expression of type \textsf{Int}, specifying the size of the array.
+One can access elements in the array using
+the construct \textsf{e1[e2]} which yields the \textsf{e2}'th element in array \textsf{e1},
+and one can insert elements into the array using the notation \textsf{e1[e2] $<$- e3}.
+Finally, as in Java, an assignment from one array \textsf{a} to an
+array \textsf{b} does not make copies of the elements contained in \textsf{a}, but addresses of elements.
+
+\begin{enumerate}
+  \item (2 pts) Give a sound subtype relation for arrays in Cool, i.e., state the conditions under which
+the subtype relation \textsf{Array(T)$\le$ T'} is valid.
+  \item Give sound typing rules that are as permissive as possible for the following constructs:
+
+\begin{enumerate}
+    \item (2 pts) \textsf{new Array[A][e]}
+    \item (2 pts) \textsf{e1[e2]}
+    \item (4 pts) \textsf{e1[e2] $<$- e3}. Assume the type of the whole expression is the type of \textsf{e1}.
+
+    \[\infertext
+    {$O,M,C$ $\vdash$ $e_1[e_2]$ $<-$  $e_3$ : $Array(T)$ }
+    {\textrm{$O,M,C$ $\vdash$ $e_1$ : $Array(T)$}
+    \ \ \ \ 	\textrm{$O,M,C$ $\vdash$ $e_2$ : $Int$}
+    \ \ \ \ 	\textrm{$O,M,C$ $\vdash$ $e_3$ : $T'$}
+    \ \ \ \   \textrm{T' $<=$ T}
+    }
+  \]
+\end{enumerate}
+\end{enumerate}
+\end{enumerate}
+\end{document}
+

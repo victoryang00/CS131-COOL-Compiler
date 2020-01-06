@@ -1,0 +1,696 @@
+\documentclass[10pt]{article}
+\usepackage[pdftex]{graphicx, color}
+\usepackage{listings}
+\usepackage{mathtools}
+\usepackage{tikz}
+\usepackage{multirow}
+\usetikzlibrary{automata,positioning}
+
+\headheight 8pt \headsep 20pt \footskip 30pt
+\textheight 9in \textwidth 6.5in
+\oddsidemargin 0in \evensidemargin 0in
+\topmargin -.35in
+
+\lstset{basicstyle=\small\ttfamily,breaklines=true}
+\newcommand {\pts}[1]{{\bf #1 pts}}
+\newcommand{\ttmath}[1]{$\mathtt{#1}$} 
+\newcommand{\ossimple}[6]{#1,#2,#3\vdash #4 : #5,#6}
+\newcommand{\osrule}[8]{\frac{#7}{\ossimple{#1}{#2}{#3}{#4}{#5}{#6}}\eqno
+  \mbox{#8}}
+  
+\begin{document}
+\begin{center} 
+\Large CS131 Compilers: Writing Assignment 4\\Due Friday, December 27, 2019 at 11:00pm
+\end{center}
+
+\begin{center}
+%% Change this:
+\LARGE yangyw - 2018533218
+\end{center}
+ 
+This assignment asks you to prepare written answers to questions on
+run-time environment, object layout, operational semantics, code generation, register allocation and garbage collection.
+Each of the questions has a short answer. You
+may discuss this assignment with other students and work on the problems
+together. However, your write-up should be your own individual work.
+and you should indicate in your submission who you worked with, if applicable.
+Written assignments are turned in at the start of lecture.
+You should use the Latex template provided at the course web site to write your solution.
+
+\begin{center}
+%% Change this:
+I worked with: Nobody
+\end{center}
+
+Example for operational semantics rule in tex:
+$$\osrule{so}{S_1} E {\mbox{while }e_1\mbox{ loop } e_2\mbox{ pool}}{void}{S_{2}}
+	{\begin{array}{l}
+	\ossimple{so}{S_1}{E}{e_1}{Bool(false)}{S_2}\\
+	 \end{array}}{[Loop-False]}
+$$
+
+\begin{enumerate}
+
+\item (10 pts)
+Consider the following Cool classes:
+
+\begin{center}
+\begin{minipage}{6cm}
+\begin{verbatim}
+class A {
+    a1 : Int;
+    a2 : String;
+    m1() : Object { ... };
+    m2() : Object { ... };
+};
+
+class B inherits A {
+    a3 : Int;
+    m1() : Object { ... };
+    m3() : Object { ... };
+};
+
+class C inherits B {
+    a4 : Int;
+    m2() : Object { ... };
+    m3() : Object { ... };
+};
+\end{verbatim}
+\end{minipage}
+\end{center}
+\begin{enumerate}
+
+\item Draw a diagram that illustrates the layout of objects of type {\tt
+A}, {\tt B} and {\tt C}, including their dispatch tables.
+\begin{center}\textbf{Object Layout}\end{center}
+\begin{center}\begin{tabular}{r|l|l|l}
+  \textbf{Stack Offset} & \textbf{A} & \textbf{B} & \textbf{C}\\
+  0 &  A \ \textbf{tag}  & B \ \textbf{tag}  & C \ \textbf{tag} \\
+  4 & 5 & 6 & 7\\
+  8 & \textbf{*} & \textbf{*} & \textbf{*} \\
+  12 & a1 & a1 &a1\\
+  16 & a2 & a2 & a2 \\
+  20 &  & a3 &a3\\
+  24 &  &  & a4 \\
+  28 &  &  &\\
+  32 &  &  &\\
+  \end{tabular}\end{center}
+
+
+  \begin{center} \textbf{Dispatch Table}\end{center}
+  \begin{center}\begin{tabular}{r|l|l|l}
+    \textbf{Stack Offset} & \textbf{A} & \textbf{B} & \textbf{C}\\
+    0 & \textbf{Object}.abort & \textbf{Object}.abort&\textbf{Object}.abort\\
+    4 & \textbf{Object}.type\_name & \textbf{Object}.type\_name & \textbf{Object}.type\_name\\
+    8 & \textbf{Object}.copy & \textbf{Object}.copy & \textbf{Object}.copy \\
+    12 & A.m1 & B.m1 & A.m1\\
+    16 & A.m2 & A.m2 & C.m2 \\
+    20 &  & B.m3 &C.m3\\
+    24 &  &  &\\
+    28 &  &  &\\
+    \end{tabular}\end{center}
+\item Let {\tt obj} be a variable whose static type is {\tt A}.  Assume
+that {\tt obj} is stored in register {\tt \$a0}.  Write MIPS code for the
+function invocation {\tt obj.2()}.  You may use temporary registers
+such as {\tt \$t0} if you wish.
+
+\begin{verbatim}
+  lw   $t0  , 8($a0)
+  lw   $t0  , 16($t0)
+  jalr $t0
+\end{verbatim}
+
+\item Explain what happens in part (b) if {\tt obj} has dynamic type {\tt
+B}.
+\begin{verbatim}
+        When obj has the dynamic type B, the dispatch pointer of B will arrive the 
+dispatch table of B. In that case, B will have A.m2, and will eventually reach A.m2. 
+They have the same function inherited from A without anything wrong.
+\end{verbatim}
+\end{enumerate}
+
+\medskip
+
+\item (10 pts)
+Suppose you wish to add arrays to Cool using the following syntax:
+
+\begin{center}
+\begin{tabular}{ll}
+\texttt{let a:T[\ttmath{e_1}] in \ttmath{e_2}} &
+  Create an array $a$ with size $e_1$ of $T$'s, usable in $e_2$ \\
+\texttt{a[\ttmath{e_1}] <- \ttmath{e_2}} &
+  Assign $e_2$ to element $e_1$ in $a$ \\
+\texttt{a[e]} &
+  Get element $e$ of $a$
+\end{tabular}
+\end{center}
+
+Write the operational semantics for these three syntactic constructs. You
+may find it helpful to think of an array of type $T[n]$ as an object with
+$n$ attributes of type $T$.\\ \\
+\texttt{let a:T[\ttmath{e_1}] in \ttmath{e_2}} \\
+$$\osrule{so}{E}{S_1} {let\ a:T[e_1]\ in\ e_2}{v_2}{S_4}
+  {\begin{array}{l} \ossimple{so}{S_1}{E}{T[e_1]}{void}{S_2}\\
+  \textrm{$l_{1}=newloc(S_2)$}  \\
+  \textrm{$S_{3}={S_2}[void/{l_1}$]} \\
+  \textrm{$E'={E}[{l_1} / a$]} \\
+  \ossimple{so}{E'}{S_3}{e_2}{void}{S_4} \\
+   \end{array}}{[Let-Array]}
+$$
+\\ 
+\texttt{a[\ttmath{e_1}] <- \ttmath{e_2}}\\
+
+$$\osrule{so}{E}{S} {a[e_1]<-\ e_2}{v}{S}
+  {\begin{array}{l}
+  \ossimple{so}{E}{S_1}{e_2}{v}{S_2} \\
+  \textrm{$E(a[e_1])=I_a$}\\
+   \end{array}}{[Assign-Array]}
+$$
+\\ \texttt{a[e]} \\
+$$\osrule{so}{E}{S_1} {a[e]}{v}{S}
+  {\begin{array}{l}
+  \textrm{$E(a[e])=I_a$}\\
+  \textrm{$S(I_a)=v_a$}\\
+   \end{array}}{[Reference-Array]}
+$$
+
+\pagebreak
+
+\item (10 pts)
+The operational semantics for Cool's {\tt while} expression show that
+result of evaluating such an expression is always {\tt void}.  (See page
+28 of the Cool manual.)
+
+However, we could have used the following alternative semantics:
+
+\begin{itemize}
+
+\item If the loop body executes at least once, the result of the {\tt
+while} expression is the result from the last iteration of the loop body.
+
+\item If the loop body never executes (i.e., the condition is false the
+first time it is evaluated), then the result of the {\tt while} expression
+is {\tt void}.
+
+\end{itemize}
+
+For example, consider the following expression:
+
+\begin{center}
+{\tt while (x < 10) loop x <- x+1 pool}
+\end{center}
+
+The result of this expression would be 10 if {\tt x} $<$ 10 or {\tt void}
+if {\tt x} $\geq$ 10.
+
+Write new operational rules for the {\tt while} construct that formalize
+these alternative semantics.
+
+$$\osrule{so}{E}{S} {while\ e_1\ loop\ e_2\ pool}{void}{S_1}
+  {\begin{array}{l}
+  \ossimple{so}{E}{S}{e_1}{Bool(false)}{S_1}\\
+   \end{array}}{[Loop-False]}
+$$
+\\ \\
+$$\osrule{so}{E}{S} {while\ e_1\ loop\ e_2\ pool}{v_1}{S_4}
+  {\begin{array}{l}
+  \ossimple{so}{E}{S}{e_1}{Bool(true)}{S_1}\\
+  \ossimple{so}{E}{S_1}{e_2}{v_1}{S_2}\\
+  \ossimple{so}{E}{S_2}{e_1}{Bool(true)}{S_3}\ \\
+  \ossimple{so}{E}{S_3} {while\ e_1\ loop\ e_2\ pool}{v_1}{S_4}
+   \end{array}}{[Loop-True]}
+$$
+\\ \\
+$$\osrule{so}{E}{S} {while\ e_1\ loop\ e_2\ pool}{v_1}{S_3}
+  {\begin{array}{l}
+  \ossimple{so}{E}{S}{e_1}{Bool(true)}{S_1}\\
+  \ossimple{so}{E}{S_1}{e_2}{v_1}{S_2}\\
+  \ossimple{so}{E}{S_2}{e_1}{Bool(false)}{S_3}\\
+   \end{array}}{[Loop-Last]}
+$$
+
+\item (10 pts) Consider the following MIPS assembly code program.  Using the
+stack-machine based code generation rules from lecture, what source program produces this
+code?
+\begin{verbatim}
+f_entry:
+        move  $fp $sp
+        sw    $ra 0($sp)
+        addiu $sp $sp -4
+        lw    $a0 4($fp)
+        sw    $a0 0($sp)
+        addiu $sp $sp -4
+        li    $a0 0
+        lw    $t1 4($sp)
+        addiu $sp $sp 4
+        beq   $a0 $t1 true_branch
+false_branch:
+        lw    $a0 4($fp)
+        sw    $a0 0($sp)
+        addiu $sp $sp -4
+        sw    $fp 0($sp)
+        addiu $sp $sp -4
+        lw    $a0 4($fp)
+        sw    $a0 0($sp)
+        addiu $sp $sp -4
+        li    $a0 1
+        lw    $t1 4($sp)
+        sub   $a0 $t1 $a0
+        addiu $sp $sp 4
+        sw    $a0 0($sp)
+        addiu $sp $sp -4
+        jal   f_entry
+        lw    $t1 4($sp)
+        add   $a0 $a0 $t1
+        addiu $sp $sp 4
+        b     end_if
+true_branch:
+        li    $a0 0
+end_if:
+        lw    $ra 4($sp)
+        addiu $sp $sp 12
+        lw    $fp 0($sp)
+        jr    $ra
+\end{verbatim}
+\textbf{Answer Here:}
+\begin{verbatim}
+  def Fibonacci(x):
+      if x == 0:
+          return 0
+      else:
+          return x + Fibonacci(x-1)
+\end{verbatim}
+
+\item (10 pts) Give a recursive definition of the cgen function for the following new construct.
+\begin{eqnarray*}
+\tt{for}\;\; i = e_1 \;\;to\;\; e_2 \;\;\tt{by}\;\; e_3 \;\;\tt{do }\;\; e_4
+\end{eqnarray*}
+
+Assume that the subexpressions $e_1, e_2, e_3$ and $e_4$ are
+integer-valued. A ``for loop'' expression is evaluated according to
+the following rules. The first three subexpressions are evaluated once
+at the start of the loop in the order $e_1$, $e_2$, and then $e_3$.
+The subexpression $e_4$ is evaluated once per iteration of the loop.
+The index variable $i$ is initialized to the value of $e_1$.
+The loop bound is the value of $e_2$ and $i$ is incremented by the
+value of $e_3$ after each iteration. The loop terminates before
+executing an iteration where the value of $i$ is greater than the
+loop bound. The value returned by the ``for loop'' expression is the value of the
+expression $e_4$ in the last iteration. If the loop does not execute
+at all, then the value returned is the integer $0$.
+
+Following is a more formal semantics of the for expression in terms of the Cool
+expressions.
+\begin{tabbing}
+  \hspace*{3mm} \= let t: Int $\leftarrow$ $e_1$ in \\
+  \> let bound:Int  $\leftarrow$ $e_2$ in \\
+  \> let incr:Int  $\leftarrow$ $e_3$ in \\
+  \> let result:Int  $\leftarrow$ $0$ in \\
+  \> let \= i:Int $\leftarrow$ $t$ in   \\
+   \>  \> while \= ($i$ $\leq$ bound) loop \{ \\
+     \>\>\>   result $\leftarrow$ $e_4$; \\
+\> \> \> $i$ $\leftarrow$ $i$ + incr; \\
+     \> \> \} pool; \\
+     \> \> result  \\
+\end{tabbing}
+
+Note that the expressions $e_1$, $e_2$ and $e_3$ are evaluated ONLY once before the start of the loop.
+Also note that any occurences of variable $i$ in $e_1$, $e_2$ and
+$e_3$ refer to the value of $i$
+just before the for loop.
+Any occurrence of variable $i$ in expression $e_4$ refers to the loop index variable $i$.
+
+
+
+\begin{verbatim}
+  cgen(for i = e1 to e2 by e3 do e4) = cgen(e1)
+        push($a0)
+        $t0 <- top
+        cgen(e_2)
+        push($a0)
+        $t1 <- top
+        cgen(e3)
+        push($a0)
+        $t2 <- top
+        $t3 <- 0
+  loop: bgt $t0 $t1 end
+        cgen(e4)
+        push($a0)
+        $t3 <- top
+        addiu $t0 $t0 $t2
+        b loop
+  end:  $a0 <- $t3
+      
+  \end{verbatim}
+
+
+\item (2*10=20 pts) Consider the following program:
+
+\begin{verbatim}
+L0: e := 0
+    b := 1;
+    d := 2;
+L1: a := b+2
+    c := d+5
+    e := e + c
+    f := a * a
+    if f < c goto L3
+L2: e := e + f
+    goto L4
+L3: e := e + 2
+L4: d := d + 4
+    b := b - 4
+    if b != d goto L1
+L5:
+\end{verbatim}
+
+This program uses six temporaries \texttt{a}-\texttt{f}.  Assume that
+our machine has only 4 available registers \texttt{\$r0},
+\texttt{\$r1}, \texttt{\$r2}, and \texttt{\$r3}
+and that only
+\texttt{e} is live on exit from this program.
+
+\begin{enumerate}
+\item Draw the register interference graph.  (Computing the sets of
+live variables at every program point may be helpful for this step.)
+
+\item Use the graph coloring heuristics discussed in lecture to assign
+  each temporary to a register on a machine that has $4$ registers.
+Rewrite the program replacing temporaries by registers and including whatever
+spill code is necessary.  Use the pseudo-instructions \texttt{load x}
+and \texttt{store x} to load and spill the value of \texttt{x} from
+memory.
+\end{enumerate}
+\begin{enumerate}
+
+    \item Draw the register interference graph.\\
+              \[
+                %% Your answer here
+                \begin{tikzpicture}[shorten >=4pt]
+                    \node[state] (I0) {
+                        \parbox{2cm}{
+                            \begin{align*}
+                              \{ live: b,d,e \} \\
+                              a := b + 2 \\
+                              \{ live: a,b,d,e\} \\
+                              c := d + 5 \\
+                              \{ live: a,b,c,d,e\}\\
+                              f := a * a\\
+                              \{ live: a,b,c,d,e,f\}\\
+                              f < c\\
+                              \{ live: a,b,d,e\}
+                            \end{align*}
+                        }
+                    };
+                
+                    \node[state, above right of=I0, node distance=9cm] (I1) {
+                        \parbox{2cm}{
+                            \begin{align*}
+                              \{ live: \} \\
+                                e := 0 \\
+                                \{ live: e\}\\
+                                b := 1\\
+                                \{ live: b,e\}\\
+                                d := 2\\
+                                \{ live: b,d,e\}
+                            \end{align*}
+                        }
+                    };
+                
+                    \node[state, below of=I1, node distance=5cm] (acc){
+                        \parbox{2cm}{
+                            \begin{align*}
+                              \{ live: b,d,e,f\} \\
+                              e := e + f \\
+                              \{ live: b,d,e\}
+                            \end{align*}
+                        }
+                    };
+                
+                    \node[state, right of=I0, node distance=11cm] (I2){
+                        \parbox{2cm}{
+                            \begin{align*}
+                              \{ live: b,d,e\} \\
+                              d := d + 4 \\
+                              \{ live: b,d,e\}\\
+                              b := b + 5 \\
+                              \{ live: b,d,e\}\\
+                              b != d\\
+                              \{ live: b,d,e\}
+                            \end{align*}
+                        }
+                    };
+                
+                    \node[state, below of=acc, node distance=5cm] (I4){
+                        \parbox{2cm}{
+                            \begin{align*}
+                              \{ live: b,d,e\} \\
+                              e := e + 2 \\
+                              \{ live: b,d,e\}
+                            \end{align*}
+                        }
+                    };
+                
+                    \node[state, below of=I4, node distance=6cm] (I3){
+                        \parbox{2cm}{
+                            \begin{align*}
+                              \{ live: e\} 
+                            \end{align*}
+                        }
+                    };  
+              
+                  \path[->]
+                  (I0) 	edge 		node[above]{} (acc)
+                        edge 	 	node[below]{} (I4)
+                  (I1)  edge 	 	node[above]{} (I0)
+                  (acc) edge 		node[above]{} (I2)
+                  (I2) 	edge 		node[above]{} (I2)
+                        edge 		node[above]{} (I0)
+                        edge 		node[above]{} (I3)
+                  (I4) 	edge 		node[above]{} (I2);
+              
+              \end{tikzpicture}
+                \]\\\\\\
+                \begin{center}\begin{tikzpicture}[shorten >=1pt,node distance=2cm,on grid,auto]
+                    \node[state] 	(c) 						{$c$};
+                    \node[state] 	(a) 	[above right=of c]	{$a$};
+                    \node[state]	(e) 	[below right=of c] 	{$e$};
+                    \node[state] 	(b) 	[	   right=of a] 	{$b$};
+                    \node[state] 	(d) 	[below right=of b] 	{$d$};
+                    \node[state] 	(f) 	[	   right=of e]	{$f$};
+                    \path[-]
+                    (a) 	edge	node	{} 		(b)
+                        edge	node	{} 		(c)
+                        edge	node	{} 		(d)
+                        edge	node	{} 		(e)
+                    (b) 	edge	node	{} 		(c)
+                        edge	node	{} 		(d)
+                        edge	node	{} 		(e)
+                        edge	node	{} 		(f)
+                    (c)		edge	node	{} 		(d)
+                        edge	node	{} 		(e)
+                        edge	node	{} 		(f)
+                    (d) 	edge	node	{} 		(e)
+                        edge	node	{} 		(f)
+                    (e) 	edge	node	{} 		(f);
+                  \end{tikzpicture}\end{center}
+                       
+
+    \item assign each temporary to a register on a machine\\
+    \begin{verbatim}
+        L0: e := 0
+            b := 1
+            store b
+            d := 2
+        L1: load b
+            a := b+2
+            c := d+5
+            e := e + c
+            f := a * a
+            if f < c goto L3
+        L2: e := e + f
+            goto L4
+        L3: e := e + 2
+        L4: d := d + 4
+            load b
+            b := b - 4
+            store b
+            if b != d goto L1
+        L5:
+        \end{verbatim}
+      
+        \begin{verbatim}
+        L0: r1 := 0
+            r0 := 1
+            store r0
+            r2 := 2
+        L1: load r0
+            r3 := r0+2
+            r0 := r2+5
+            r1 := r1 + r0
+            r3 := r3 * r3
+            if r3 < r0 goto L3
+        L2: r1 := r1 + r3
+            goto L4
+        L3: r1 := r1 + 2
+        L4: r2 := r2 + 4
+            load r0
+            r0 := r0 - 4
+            store r0
+            if r0 != r2
+               goto L1
+        L5:
+      
+        \end{verbatim}
+
+    \begin{center}\begin{tikzpicture}[shorten >=1pt,node distance=2cm,on grid,auto]
+        \node[state] 	(c) 						{$c$};
+        \node[state] 	(a) 	[above right=of c]	{$a$};
+        \node[state]	(e) 	[below right=of c] 	{$e$};
+        \node[state] 	(b) 	[	   right=of a] 	{$b$};
+        \node[state] 	(d) 	[below right=of b] 	{$d$};
+        \node[state] 	(f) 	[	   right=of e]	{$f$};
+        \path[-]
+        (a)     edge	node	{} 		(c)
+                edge	node	{} 		(d)
+                edge	node	{} 		(e)
+        (b) 	edge	node	{} 		(c)
+                edge	node	{} 		(d)
+                edge	node	{} 		(e)
+        (c)		edge	node	{} 		(d)
+                edge	node	{} 		(e)
+                edge	node	{} 		(f)
+        (d) 	edge	node	{} 		(e)
+                edge	node	{} 		(f)
+        (e) 	edge	node	{} 		(f);
+    \end{tikzpicture}\end{center}
+\end{enumerate} 
+
+
+\item (10*3=30 pts) Consider the following Cool program:
+
+\begin{verbatim}
+class C {
+  x : C; y : C;
+  setx(newx : C) : C { x <- newx };
+  sety(newy : C) : C { y <- newy };
+  setxy(newx : C, newy :C) : SELFT_TYPE {{ x <- newx; y <- newy; self; }};
+};
+
+class Main {
+  x:C;
+  main() : Object {
+    let a : C <- new C, b :C <- new C, c : C<- new C, d : C <- new C,
+    e : C <- new C, f :C <- new C, g : C <- new C, h : C <- new C in {
+      f.sety(g), a.setxy(e, c); b.setx(f); g.setxy(f,d); c.sety(h); h.setxy(e, a); x <- c;
+    }
+  };
+};
+\end{verbatim}
+\begin{enumerate}
+  \item (10 pts) Draw the heap at the end of execution of the above program, identifying objects by the variable names to which they are bound in the let expression. Assume that the root is the Main object created at the start of the program, and this object is not in the heap (note that Main is pointing to c).
+
+
+  \begin{center}\begin{tikzpicture}[shorten >=1pt,node distance=2cm,on grid,auto]
+    \node[state] 			(a) 					{$a$};
+    \node[state] 			(b) 	[right=of a]	{$b$};
+    \node[state]			(c) 	[right=of b] 	{$c$};
+    \node[state] 			(d) 	[right=of c] 	{$d$};
+    \node[state] 			(e) 	[right=of d] 	{$e$};
+    \node[state] 			(f) 	[right=of e]	{$f$};
+    \node[state] 			(g) 	[right=of f]	{$g$};
+    \node[state] 			(h) 	[right=of g]	{$h$};
+    \path[->]
+    (a) 	edge	[bend left]		node 	{} 		(e)
+        edge	[bend left] 	node 	{} 		(c)
+    (b)		edge	[bend left] 	node 	{} 		(f)
+    (c)		edge	[bend left] 	node 	{} 		(h)
+    (f) 	edge	[bend left] 	node 	{} 		(g)
+    (g) 	edge	[bend left] 	node 	{} 		(f)
+        edge	[bend left] 	node 	{} 		(d)
+    (h) 	edge 	[bend left] 	node 	{} 		(e)
+        edge 	[bend left] 	node 	{} 		(a);
+  \end{tikzpicture}\end{center}
+
+
+
+
+  \item (10 pts) For each of the garbage collection algorithms discussed in class (Mark and Sweep, Stop and Copy,
+Reference Counting), show the heap after garbage collection.
+% [state, above right of=I0, node distance=9cm]
+
+\textbf{Mark and Sweep} \\
+\begin{center}\begin{tikzpicture}[shorten >=1pt,node distance=2cm,on grid,auto]
+	\node[state] 			(a) 					{$a$};
+	\node[state] 			(b) 	[right=of a]	{$deleted$};
+	\node[state]			(c) 	[right=of b] 	{$c$};
+	\node[state] 			(d) 	[right=of c] 	{$deleted$};
+	\node[state] 			(e) 	[right=of d] 	{$e$};
+	\node[state] 			(f) 	[right=of e]	{$deleted$};
+	\node[state] 			(g) 	[right=of f]	{$deleted$};
+	\node[state] 			(h) 	[right=of g]	{$h$};
+	\path[->]
+	(a) 	edge	[bend left]		node 	{} 		(e)
+			edge	[bend left] 	node 	{} 		(c)
+	(c)		edge	[bend left] 	node 	{} 		(h)
+	(h) 	edge 	[bend left] 	node 	{} 		(e)
+			edge 	[bend left] 	node 	{} 		(a);
+\end{tikzpicture}\end{center}
+
+\textbf{Stop and Copy} \\
+\begin{center}\begin{tikzpicture}[shorten >=1pt,node distance=1cm,on grid,auto]
+	\node[state] 			(oa) 					{$Old$};
+	\node[state] 			(ob) 	[right=of oa]	{$Old$};
+	\node[state]			(oc) 	[right=of ob]	{$Old$};
+	\node[state] 			(od) 	[right=of oc]	{$Old$};
+	\node[state] 			(oe) 	[right=of od]	{$Old$};
+	\node[state] 			(of) 	[right=of oe]	{$Old$};
+	\node[state] 			(og) 	[right=of of]	{$Old$};
+	\node[state] 			(oh) 	[right=of og]	{$Old$};
+	\node[state] 			(a) 	[right=of oh]	{$a$};
+	\node[state]			(c) 	[right=2cm of a] 	{$c$};
+	\node[state] 			(e) 	[right=2cm of c] 	{$e$};
+	\node[state] 			(h) 	[right=2cm of e]	{$h$};
+	\path[->]
+	(a) 	edge	[bend left]		node 	{} 		(e)
+			edge	[bend left] 	node 	{} 		(c)
+	(c)		edge	[bend left] 	node 	{} 		(h)
+	(h) 	edge 	[bend left] 	node 	{} 		(e)
+			edge 	[bend left] 	node 	{} 		(a);
+\end{tikzpicture}\end{center}
+
+\textbf{Reference Counting} \\
+\begin{center}\begin{tikzpicture}[shorten >=1pt,node distance=2cm,on grid,auto]
+	\node[state] 			(a) 					{$a_1$};
+	\node[state] 			(b) 	[right=of a]	{$deleted$};
+	\node[state]			(c) 	[right=of b] 	{$c_1$};
+	\node[state] 			(d) 	[right=of c] 	{$d_1$};
+	\node[state] 			(e) 	[right=of d] 	{$e_2$};
+	\node[state] 			(f) 	[right=of e]	{$f_1$};
+	\node[state] 			(g) 	[right=of f]	{$g_1$};
+	\node[state] 			(h) 	[right=of g]	{$h_1$};
+	\path[->]
+	(a) 	edge	[bend left]		node 	{} 		(e)
+			edge	[bend left] 	node 	{} 		(c)
+	(c)		edge	[bend left] 	node 	{} 		(h)
+	(f) 	edge	[bend left] 	node 	{} 		(g)
+	(g) 	edge	[bend left] 	node 	{} 		(f)
+			edge	[bend left] 	node 	{} 		(d)
+	(h) 	edge 	[bend left] 	node 	{} 		(e)
+			edge 	[bend left] 	node 	{} 		(a);
+\end{tikzpicture}\end{center}
+
+
+
+  \item (10 pts) Which technique performed the worst for the above program ? Describe why the technique failed to
+reclaim the memory occupied by one or more heap variables which are no longer reachable.
+\par
+Performance is a rather vague word when used alone. We will analysis in terms of space performance and time performance.
+\par
+As for the space occupation, reference counting is the worst. Because it even can't remove all the garbage which is not sound. The reason is beacuse any pieces of memory can't be deleted when referencing. By the rest two perform similarly.
+\par
+As for the time complexity, stop and copy is the worst. It is deleting by coping the useful data to a new place and leave the useless behind. After all copy all the data verbatim is expensive than deleting.
+\end{enumerate}
+\end{enumerate}
+\end{document}
+

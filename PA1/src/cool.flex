@@ -2,13 +2,14 @@
 #include <cool-parse.h>
 #include <stringtab.h>
 #include <utilities.h>
-
+#include <string>
+using namespace std;
 /* The compiler assumes these identifiers. */
 #define yylval cool_yylval
 #define yylex  cool_yylex
 
 /* Max size of string constants */
-#define MAX_STR_CONST 1024
+#define MAX_STR_CONST 1025
 #define YY_NO_UNPUT   /* keep g++ happy */
 
 extern FILE *fin; /* we read from this file */
@@ -29,188 +30,352 @@ extern int curr_lineno;
 
 extern YYSTYPE cool_yylval;
 
-int nested_comment_level=0; /* count the nested '(**)' comment */
-
-/* define macros to accelerate */
-
-#define ADD_ID (yylval.symbol = idtable.add_string(yytext, yyleng)) /* dump id from yytext */
-#define ADD_INT (yylval.symbol = inttable.add_string(yytext, yyleng)) /* dump integer from yytext */
-#define ADD_STR (yylval.symbol = stringtable.add_string(yytext, yyleng)) /* dump string from yytext */
-#define ADD_BOOL (yylval.boolean = yytext[0]=='t'?1:0) /* dump boolean from yytext */
-#define ADD_ERR(s) (cool_yylval.error_msg=s) /* deliver custom error message */
-
-#define ADD_CHAR(c) (*(string_buf_ptr++)=c) /* assemble string */
-#define HAVE_BUF (string_buf_ptr-string_buf<MAX_STR_CONST) /* whether buffer is full */
-#define CHECK_IF_TOO_LONG(c) {if(HAVE_BUF)ADD_CHAR(c);else {ADD_ERR("String constant too long");BEGIN(RESUME_AFTER_STR);return ERROR;}} /* check length and assemble string or return error*/ 
+/*
+ *  Add Your own definitions here
+ */
+extern int comment_layer=0;
 %}
 
 %option noyywrap
 
-/* define states */
-/* whether in a '(**)' comment */
-%x COMMENT 
-/* whether assembling a string */
-%x STRCONST 
-/* whether ignoring an incomplete string */
-%x RESUME_AFTER_STR 
+/*Define names for regular expressions here.*/
 
-/* basic element */
-digit               [0-9]
-token_char          [A-Za-z0-9_]
-WS                  [ \t\r\f\v]
-
-/* one-line comment */
-COMMENT_INLINE      --.*
-
-/* tokens defined in `cool-parse.h` */
-CLASS           (?i:class)
-ELSE            (?i:else)
-FI              (?i:fi)
-IF              (?i:if)
-IN              (?i:in)
-INHERITS        (?i:inherits)
-LET             (?i:let)
-LOOP            (?i:loop)
-POOL            (?i:pool)
-THEN            (?i:then)
-WHILE           (?i:while)
-CASE            (?i:case)
-ESAC            (?i:esac)
-OF              (?i:of)
-DARROW          =>
-NEW             (?i:new)
-ISVOID          (?i:isvoid)
-INT_CONST       {digit}+
-BOOL_CONST      t(?i:rue)|f(?i:alse)
-TYPEID          [A-Z]{token_char}*
-OBJECTID        [a-z]{token_char}*
-ASSIGN          <-
-NOT             (?i:not)
-LE              <=
-
-/* single valid characters */
-SYNTACTIC       ","|";"|":"|"("|")"|"@"|"{"|"}"
-OPERATOR        "+"|"/"|"-"|"*"|"="|"<"|"."|"~"
-
-
+digit       [0-9]
+darrow      =>
+%Start      COMMENT
+%Start      START_COMMENT
+%Start      STRING
+/*
+#define CLASS 258
+#define ELSE 259
+#define FI 260
+#define IF 261
+#define IN 262
+#define INHERITS 263
+#define LET 264
+#define LOOP 265
+#define POOL 266
+#define THEN 267
+#define WHILE 268
+#define CASE 269
+#define ESAC 270
+#define OF 271
+#define DARROW 272
+#define NEW 273
+#define ISVOID 274
+#define STR_CONST 275
+#define INT_CONST 276
+#define BOOL_CONST 277
+#define TYPEID 278
+#define OBJECTID 279
+#define ASSIGN 280
+#define NOT 281
+#define LE 282
+#define ERROR 283
+#define LET_STMT 285
+*/
 %%
 
- /* ignore whitespaces */
-{WS}                            ;
+ /*
+  * Define regular expressions for the tokens of COOL here. Make sure, you
+  * handle correctly special cases, like:
+  *   - Nested comments
+  *   - String constants: They use C like systax and can contain escape
+  *     sequences. Escape sequence \c is accepted for all characters c. Except
+  *     for \n \t \b \f, the result is c.
+  *   - Keywords: They are case-insensitive except for the values true and
+  *     false, which must begin with a lower-case letter.
+  *   - Multiple-character operators (like <-): The scanner should produce a
+  *     single token for every such operator.
+  *   - Line counting: You should keep the global variable curr_lineno updated
+  *     with the correct line number
+  */
+ /* This is for Initial func for comment, the function puts in the comment and adds up the layer */
+<INITIAL,COMMENT,START_COMMENT>"(*" {
+  comment_layer++;
+  BEGIN COMMENT;
+}
 
- /* ignore one-line comment */
-{COMMENT_INLINE}                ;
+ /* Define different kind of comment to pair.(special case: '\n') */
+<COMMENT>[^\n(*]* { }
+
+<COMMENT>[()*] { }
+
+  /* This is the end of comment, logically return to final automachine mode. */
+<COMMENT>"*)" {
+    comment_layer--;
+    if (comment_layer == 0) {
+        BEGIN 0;
+    }
+}
+
+  /* Define the EOF and return error.(special case) */
+<COMMENT><<EOF>> {
+    yylval.error_msg = "EOF in comment";
+    BEGIN 0;
+    return ERROR;
+}
+
+  /* Define the unmateched end sign recognition. */
+"*)" {
+    yylval.error_msg = "Unmatched *)";
+    return ERROR;
+}
+
+  /* -------------
+   * START COMMENT 
+   *  Definition
+   * -------------
+   */
 
 
- /* deal with nested `(**)` comment */
- /* step in when meet `(*` */
-"(*"                            {++nested_comment_level;
-                                BEGIN(COMMENT);}
- /* report unmatched `*)` */
-<INITIAL>"*)"                   {ADD_ERR("Unmatched *)");
-                                return ERROR;}
-<COMMENT>{
- /* step out when meet `*)` */
-"*)"                            {--nested_comment_level;
-                                if(nested_comment_level==0){
-                                BEGIN(INITIAL);
-                                }}
-"(*"                            {++nested_comment_level;}
-\n                              {++curr_lineno;}
-.                               ;
- /* report when meet EOF */
-<<EOF>>                         {ADD_ERR("EOF in comment");
-                                BEGIN(INITIAL);
-                                return ERROR;}
+<INITIAL>"--" { BEGIN START_COMMENT; }
+
+ /* Pair any character.(special case: '\n') */ 
+<START_COMMENT>[^\n]* { }
+
+ /* If seen '\n' in the end, the comment ends */
+<START_COMMENT>\n {
+    curr_lineno++;
+    BEGIN 0;
 }
 
 
- /* deal with string */
- /* enter <STRCONST> and reset buffer pointer when meet `"` */
-\"                              {string_buf_ptr=string_buf;
-                                BEGIN(STRCONST);}
-<STRCONST>{
- /* escape when meet `"` and judge if string has null character, and add string to string table from buffer */
-\"                              {for(register auto i=string_buf;i!=string_buf_ptr;++i)
-                                if((*i)==0){
-                                ADD_ERR("String contains null character.");
-                                BEGIN(INITIAL);
-                                return ERROR;}
-                                yylval.symbol = stringtable.add_string(string_buf, string_buf_ptr-string_buf);
-                                BEGIN(INITIAL);
-                                return STR_CONST;
-                                }
- /* report unescaped newline */
-\n                              {++curr_lineno;
-                                ADD_ERR("Unterminated string constant");
-                                BEGIN(INITIAL);
-                                return ERROR;
-                                }
- /* pick escaped newline (also work for CRLF) */
-\\\r?\n                         {++curr_lineno;
-                                CHECK_IF_TOO_LONG(yytext[1]);}
- /* translate meaningful escape */
-\\b                             {CHECK_IF_TOO_LONG('\b');}
-\\t                             {CHECK_IF_TOO_LONG('\t');}
-\\n                             {CHECK_IF_TOO_LONG('\n');}
-\\f                             {CHECK_IF_TOO_LONG('\f');}
- /* copy meaningless escape except `\0` */
-\\[^btnf\0]                     {CHECK_IF_TOO_LONG(yytext[1]);}
- /* simply copy */
-.                               {CHECK_IF_TOO_LONG(yytext[0]);}
- /* report when meet EOF */
-<<EOF>>                         {ADD_ERR("EOF in string constant");
-                                BEGIN(INITIAL);
-                                return ERROR;}
+  /* -------------
+   *  STR_CONST
+   *  Definition
+   * -------------
+   * String constants: They use C like systax and can contain escape
+   *     sequences. Escape sequence \c is accepted for all characters c. Except
+   *     for \n \t \b \f, the result is c.
+   */
+
+<INITIAL>(\") {
+    BEGIN STRING;
+    yymore();
+}
+
+ /* If '\\' '\"' '\n' is read, it may cause some uncertainty */
+<STRING>[^\\\"\n]* { yymore(); }
+
+ /* Normally escape characters*/
+<STRING>\\[^\n] { yymore(); }
+
+ /* If lexer see a '\\' at the end of a line, the string will still continues. */
+<STRING>\\\n {
+    curr_lineno++;
+    yymore(); //always check the ability.
+}
+
+ /* If meet EOF in the middle of a string, error */
+<STRING><<EOF>> {
+    yylval.error_msg = "EOF in string constant";
+    BEGIN 0;
+    yyrestart(yyin);
+    return ERROR;
+}
+
+ /* To meet a '\n' in the middle of a string without a '\\', error */
+<STRING>\n {
+    yylval.error_msg = "Unterminated string constant for \n";
+    BEGIN 0;
+    curr_lineno++;
+    return ERROR;
+}
+
+ /* To meet a "\\0"*/
+<STRING>\\0 {
+    yylval.error_msg = "Unterminated string constant for 0";
+    BEGIN 0;
+    return ERROR;
+}
+
+ /* string ends, we need to deal with some escape characters */
+<STRING>\" {
+    std::string input(yytext, yyleng);
+
+    // remove the '\"'s on both sizes.
+    input = input.substr(1, input.length() - 2);
+
+    std::string output = "";
+    std::string::size_type pos;
+    
+    if (input.find_first_of('\0') != std::string::npos) {
+        yylval.error_msg = "String contains null character";
+        BEGIN 0;
+        return ERROR;    
+    }
+
+    while ((pos = input.find_first_of("\\")) != std::string::npos) {
+        output += input.substr(0, pos);
+
+        switch (input[pos + 1]) {
+        case 'b':
+            output += "\b";
+            break;
+        case 't':
+            output += "\t";
+            break;
+        case 'n':
+            output += "\n";
+            break;
+        case 'f':
+            output += "\f";
+            break;
+        default:
+            output += input[pos + 1];
+            break;
+        }
+
+        input = input.substr(pos + 2, input.length() - 2);
+    }
+
+    output += input;
+
+    if (output.length() > 1024) {
+        yylval.error_msg = "String constant too long";
+        BEGIN 0;
+        return ERROR;    
+    }
+
+    cool_yylval.symbol = stringtable.add_string((char*)output.c_str());
+    BEGIN 0;
+    return STR_CONST;
+
 }
 
 
- /* ignore the rest of incomplete string */
-<RESUME_AFTER_STR>{
- /* new line is ok */
-\n                              {++curr_lineno;
-                                BEGIN(INITIAL);}
- /* ignore all character and `\"` except `"` */
-\\\"|[^\"]                      ;
- /* end `"` is ok */
-\"                              BEGIN(INITIAL);
+ /* ----------
+  *  Keywords
+  * Definition
+  * ----------
+  * Keywords: They are case-insensitive except for the values true and
+  *     false, which must begin with a lower-case letter.
+  */
+
+ /* CLASS */
+(?i:class) { return CLASS; }
+
+ /* ELSE */
+(?i:else) { return ELSE; }
+
+ /* FI */
+(?i:fi) { return FI; }
+
+ /* IF */
+(?i:if) { return IF; }
+
+ /* IN*/
+(?i:in) { return IN; }
+
+ /* INHERITS */
+(?i:inherits) { return INHERITS; }
+
+ /* LET */
+(?i:let) { return LET; }
+
+ /* LOOP */
+(?i:loop) { return LOOP; }
+
+ /* POOL */
+(?i:pool) { return POOL; }
+
+ /* THEN */
+(?i:then) { return THEN; }
+
+ /* WHILE */
+(?i:while) { return WHILE; }
+
+ /* CASE */
+(?i:case) { return CASE; }
+
+ /* ESAC */
+(?i:esac) { return ESAC; }
+
+ /* OF */
+(?i:of) { return OF; }
+
+ /* NEW */
+(?i:new) { return NEW; }
+
+ /* ISVOID */
+(?i:isvoid) { return ISVOID; }
+
+ /* NOT */
+(?i:not) { return NOT; }
+
+
+ /* INT_CONST */
+{digit}+ {
+    cool_yylval.symbol = inttable.add_string(yytext);
+    return INT_CONST;
 }
 
- /* simple token */
-{CLASS}                         return CLASS;
-{ELSE}                          return ELSE;
-{FI}                            return FI;
-{IF}                            return IF;
-{IN}                            return IN;
-{INHERITS}                      return INHERITS;
-{LET}                           return LET;
-{LOOP}                          return LOOP;
-{POOL}                          return POOL;
-{THEN}                          return THEN;
-{WHILE}                         return WHILE;
-{CASE}                          return CASE;
-{ESAC}                          return ESAC;
-{OF}                            return OF;
-{DARROW}                        return DARROW;
-{NEW}                           return NEW;
-{ISVOID}                        return ISVOID;
-{NOT}                           return NOT;
-{ASSIGN}                        return ASSIGN;
-{LE}                            return LE;
+ /* BOOL_CONST */
+t(?i:rue) {
+    cool_yylval.boolean = 1;
+    return BOOL_CONST;
+}
 
- /* token need to dump from yytext */
-{INT_CONST}                     {ADD_INT;return INT_CONST;}
-{BOOL_CONST}                    {ADD_BOOL;return BOOL_CONST;}
-{TYPEID}                        {ADD_ID;return TYPEID;}
-{OBJECTID}                      {ADD_ID;return OBJECTID;}
+f(?i:alse) {
+    cool_yylval.boolean = 0;
+    return BOOL_CONST;
+}
 
- /* character of length 1 */
-{SYNTACTIC}|{OPERATOR}          return * yytext;
+ /* White Space */
+[ \f\r\t\v]+ { }
 
- /* count line number */
-\r?\n                           {++curr_lineno;}
+ /* TYPEID */
+[A-Z][A-Za-z0-9_]* {
+    cool_yylval.symbol = idtable.add_string(yytext);
+    return TYPEID;
+}
 
- /* report all invalid characters */
-.                               {ADD_ERR(yytext);return ERROR;}
+ /* To treat lines. */
+"\n" {
+    curr_lineno++;
+}
+
+ /* OBJECTID */
+[a-z][A-Za-z0-9_]* {
+    cool_yylval.symbol = idtable.add_string(yytext);
+    return OBJECTID;
+}
+
+ /* =========
+  * operators
+  * =========
+  */
+
+ /* ASSIGN */
+"<-" { return ASSIGN; }
+
+ /* LE */
+"<=" { return LE; }
+
+ /* DARROW */
+"=>" { return DARROW; }
+"+" { return int('+'); }
+"-" { return int('-'); }
+"*" { return int('*'); }
+"/" { return int('/'); }
+"<" { return int('<'); }
+"=" { return int('='); }
+"." { return int('.'); }
+";" { return int(';'); }
+"~" { return int('~'); }
+"{" { return int('{'); }
+"}" { return int('}'); }
+"(" { return int('('); }
+")" { return int(')'); }
+":" { return int(':'); }
+"@" { return int('@'); }
+"," { return int(','); }
+
+[^\n] {
+    //error
+    yylval.error_msg = yytext;
+    return ERROR;
+}
 
 %%

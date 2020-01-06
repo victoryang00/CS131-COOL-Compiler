@@ -1,7 +1,0 @@
-.DS_Store
-*.pyc
-/.idea/
-__pycache__/
-.*.swp
-.*.swo
-.vscode/

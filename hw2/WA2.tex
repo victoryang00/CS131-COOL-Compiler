@@ -1,0 +1,515 @@
+\documentclass[10pt]{article}
+\usepackage[pdftex]{graphicx, color}
+\usepackage{listings}
+\usepackage{mathtools}
+\usepackage{tikz}
+\usepackage{multirow}
+\usetikzlibrary{automata,positioning,trees}
+
+\headheight 8pt \headsep 20pt \footskip 30pt
+\textheight 9in \textwidth 6.5in
+\oddsidemargin 0in \evensidemargin 0in
+\topmargin -.35in
+
+\lstset{basicstyle=\small\ttfamily,breaklines=true}
+\newcommand {\pts}[1]{{\bf #1 pts}}
+
+\begin{document}
+\begin{center}
+\Large CS131 Compilers: Writing Assignment 2\\Due Thursday, October 31, 2019 at 23:59
+\end{center}
+
+\begin{center}
+%% Change this:
+\LARGE yangyw - 2018533218
+\end{center}
+
+This assignment asks you to prepare written answers to questions on
+context-free grammars and parsing. Each of the questions has a short answer. You
+may discuss this assignment with other students and work on the problems
+together. However, your write-up should be your own individual work.
+and you should indicate in your submission who you worked with, if applicable.
+Written assignments are turned in at the start of lecture.
+You should use the Latex template provided at the course web site to write your solution.
+
+\begin{center}
+%% Change this:
+I worked with: (zhanglw,2018533113).
+\end{center}
+
+\begin{enumerate}
+  \item  \pts{$2\times 3= 6$} Give context-free grammar (CFG) for each of the following languages:
+  \begin{enumerate}
+           \item The set of all finite strings (non-empty string) over the alphabet $\{0,1\}$ with an equal number of 0's and 1's.
+            \[
+            %% Your answer here
+            S\rightarrow SS \mid 0S1\mid 1S0\mid \epsilon
+            \]
+           \item The set of all finite strings (non-empty string) over the alphabet $\{0,1\}$ with an unequal number of 0's and 1's.
+            \[
+            %% Your answer here
+            \begin{array}{cll}
+            S&\rightarrow& A0A\mid A0S\\
+            A&\rightarrow& 0A1A\mid 1A0A\mid \epsilon
+            % B&\rightarrow& 1\mid 1S\mid 2AA\mid \epsilon
+            \end{array}
+            \]
+           \item The set $L_3=L_1\cap L_2$, where $L_1$ and $L_2$ are defined below.
+           Let $L_1$ be the finite strings consisting of all non-empty \emph{palindromes} over the alphabet $\{a,b\}$. That is $L_1$
+           consists of all sequences of a's and b's that read the same forward or backward. For example, $abba,~aabbbaa\in L_1$, but $abb\not\in L_1$.
+           Let $L_2$ be the language over  $\{a,b\}$ representing the language of the regular expression $b(a+b)^\ast$.
+            \[
+            %% Your answer here
+            \begin{array}{cll}
+              S    &\rightarrow b\ A\ b \\
+              A    &\rightarrow a\ A\ a\ |\ b\ A\ b\ |\ \epsilon
+              \end{array}
+            \]
+  \end{enumerate}
+  %
+  \item \pts{$3\times 2= 6$} Consider the following CFG with terminals $\{(,),+,*,a,b\}$ ($+$ represents union) that is used to represent
+regular expressions over alphabet $\{a, b\}$:
+\[R\rightarrow R+R \mid RR\mid (R)\mid R^\ast \mid a\mid b\]
+\begin{enumerate}
+  \item Using the above CFG, provide a derivation for the following input string $(a+(ba)^\ast b)^\ast$.
+            \[
+            %% Your answer here
+            \begin{array}{cll}
+            R &\Rightarrow R^* &(R\rightarrow R ^{*})\\
+            &\Rightarrow (R)^* &(R\rightarrow (R))\\
+            &\Rightarrow (R+R)^*&(R\rightarrow R+R)\\
+            &\Rightarrow (R+RR)^*&(R\rightarrow RR)\\
+            &\Rightarrow (R+Rb)^* &(R\rightarrow b)\\
+            &\Rightarrow (R+R^*b)^*&(R\rightarrow b)\\
+            &\Rightarrow (R+(R)^*b)^* &(R\rightarrow (R))\\
+            &\Rightarrow (R+(RR)^*b)^*&(R\rightarrow RR)\\
+            &\Rightarrow (R+(Ra)^*b)^*&(R\rightarrow a)\\
+            &\Rightarrow (R+(ba)^*b)^*&(R\rightarrow b)\\
+            &\Rightarrow (a+(ba)^*b)^*&(R\rightarrow b)
+          \end{array}
+            \]
+  \item For the derivation in above solution, provide the corresponding parse tree.
+            \[
+            %% Your answer here
+              \begin{tikzpicture}
+              \node  {R}
+                child{node  {R}
+                  child{node  {(}}
+                  child{node  {R}
+                    child{node  {R}
+                      child{node  {a}}
+                    }
+                    child{node  {+}}
+                    child{node  {R}
+                      child{node  {R}
+                        child{node  {R}
+                          child{node  {(}}
+                          child{node  {R}
+                            child{node  {R}
+                              child{node  {b}
+                            }}
+                            child{node  {R}
+                              child{node  {a}
+                            }}}
+                          child{node {)}}}
+                        child{node  {$^{*}$}}}
+                      child{node  {R}
+                        child{node  {b}}}}}
+                  child{node {)}}}
+                child{node  {$^{*}$}};
+              \end{tikzpicture}
+            \]
+\end{enumerate}
+
+
+
+   \newpage
+
+\item \pts{$3\times 3= 9$} Consider the following CFG.
+\[\begin{array}{cll}
+S & \rightarrow & AED \mid F \\
+A & \rightarrow & Aa \mid a \\
+B & \rightarrow & Bb \mid b \\
+C & \rightarrow & Cc \mid c \\
+D & \rightarrow & Dd \mid d \\
+E & \rightarrow & bEc \mid bc \\
+F & \rightarrow & aFd \mid BC \mid bc
+\end{array}\]
+
+\begin{enumerate}
+\item What is the language generated by this grammar?
+            \[
+            %% Your answer here
+            \begin{array}{cll}
+            P = \{a^ib^jc^jd^k, a^ib^jc^kd^i,bc \ | \ i,j,k\geq 1\}
+            \end{array}
+            \]
+\item Is the grammar as given ambiguous? If yes, give an example of an expression
+with two parse trees under this grammar. If not, explain why that is the case.
+            \[
+            %% Your answer here
+            \begin{array}{cll}
+            Yes.\ Because\ there\ are\ 3\ parse\ trees\ to\ demonstrate\ the\ CFG.\\\\
+            \begin{tikzpicture}
+              \node  {S}
+                child{node  {A}
+                  child{node  {a}}}
+                child{node  {E}
+                  child{node{b}}
+                  child{node{c}}}
+                child{node  {D}
+                  child{node{d}}};
+              \end{tikzpicture}
+              \begin{tikzpicture}
+                \node  {S}
+                  child{node  {F}
+                    child{node  {a}}
+                    child{node  {F}
+                    child{node  {B}
+                    child{node  {b}}}
+                    child{node  {C}
+                    child{node  {c}}}}
+                    child{node  {d}}};
+                \end{tikzpicture}
+                \begin{tikzpicture}
+                  \node  {S}
+                    child{node  {F}
+                      child{node  {b}}
+                      child{node  {c}}};
+                  \end{tikzpicture}
+            \end{array}
+            \]
+\item Transform the CFG given above by eliminating ambiguity and
+left recursion, if needed.
+            \[
+            %% Your answer here
+            \begin{array}{cll}
+            Just\ need \ to \ eliminate \ the \ disjoint \ in \ the \ graph.\\
+            \begin{array}{cll}
+              S & \rightarrow & AED \mid F \\
+              A & \rightarrow & a \mid aA \\
+              B & \rightarrow & b \mid bB \\
+              C & \rightarrow & c \mid cC \\
+              D & \rightarrow & d \mid dD \\
+              E & \rightarrow & bEc \mid bc \\
+              F & \rightarrow & aFd \mid BE \mid EC \mid bc
+              \end{array}
+              \end{array}
+            \]
+\end{enumerate}
+
+
+   \newpage
+\item \pts{$3\times 3= 9$} Consider the following CFG.
+\[\begin{array}{cll}
+A & \rightarrow & [AB] \mid a \\
+B & \rightarrow & \epsilon \mid +AC \mid Cb \\
+C & \rightarrow & \epsilon \mid -ABc
+\end{array}\]
+\begin{enumerate}
+  \item Compute the First and Follow sets for the grammar.
+      \begin{align*}
+          FIRST([AB])     &= \{[\}                \\
+          FIRST(a)        &= \{a\}                \\
+          FIRST(A)        &= \{[, a\}             \\
+          FIRST(\epsilon) &= \{\epsilon\}         \\
+          FIRST(+AC)      &= \{+\}                \\
+          FIRST(-ABc)     &= \{-\}                \\
+          FIRST(C)        &= \{\epsilon, -\}      \\
+          FIRST(Cb)       &= \{b, -\}             \\
+          FIRST(B)        &= \{\epsilon, +, -, b\}\\
+          \\
+          FOLLOW(B)       &= \{],c\}              \\
+          FOLLOW(C)       &= \{b,],c\}            \\
+          FOLLOW(A)       &= \{\$,+,-,b,c,]\}
+      \end{align*}
+  \item Give the LL(1) parsing table for the grammar.
+  \begin{table}[h!]
+  \centering
+      \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+          \hline
+          \multirow{2}{6em}{nonterminal}
+                              & \multicolumn{8}{|c|}{Input} \\
+          \cline{2-9}         & [ & ] & a & b & c & + & - & \$ \\ \hline
+          A                   & $A \rightarrow [AB]$ & & $A \rightarrow a$ & &  &  &  &\\ \hline
+          B                   & & $B \rightarrow \epsilon$ & & $B\rightarrow Cb $ & $B \rightarrow \epsilon$ & $B \rightarrow +AC$ & $B \rightarrow Cb$ &\\ \hline
+          C                  &  & $C \rightarrow \epsilon$ &  & $C \rightarrow \epsilon$ & $C \rightarrow \epsilon$ &  & $C \rightarrow -ABc$ & \\ \hline
+      \end{tabular}
+  \end{table}
+  \item Is this grammar LL(1)? and Why.\\
+        Yes,\ because: \\
+        1. $A \rightarrow \alpha | \beta$ holds true for all the productions.  \\
+        2. no terminal $a$ do both $\alpha$ and $\beta$ derive strings beginning with $a$.\\
+        3. at most one of $\alpha$ and $\beta$ can derive the empty string.\\
+        4. If $\beta \overset{*}{\Rightarrow} \epsilon$, then $\alpha$ does not derive any string beginning with a terminal in $FOLLOW(A)$.\\
+        5. if $\alpha \overset{*}{\Rightarrow} \epsilon$, then $\beta$ does not derive any string beginning with a terminal in $FOLLOW(A)$.\\
+\end{enumerate}
+\item \pts{$8$}  Using the context-free grammar for Cool given in Section 11 of the Cool
+manual (the link of the book has been given in piazza) , draw a parse tree for the following expression.
+  \begin{lstlisting}
+    while not (x <-z <- 0) loop
+      y <- z + 2 * x + 1
+    pool
+  \end{lstlisting}
+Note that the context-free grammar by itself is ambiguous, so you will
+need to use the precedence and associativity rules in Section 11.1 to
+get the correct tree.
+             \[
+              \begin{array}{cll}
+                \begin{tikzpicture}
+                  \node  {expr}
+                    child{node  {\textbf{while}}}
+                    child{node  {expr}
+                      child{node{\textbf{not}}}
+                      child{node{expr}
+                        child{node  {(}}
+                        child{node  {expr}
+                          child{node{\textbf{ID}}
+                            child{node{x}}}
+                          child{node{$\leftarrow$}}
+                          child{node{expr}
+                            child{node  {\textbf{ID}}}
+                            child{node  {$\leftarrow$}}
+                            child{node  {expr}
+                              child{node  {\textbf{integer}}
+                              child{node  {0}}}}
+                            }
+                          }
+                        child{node  {)}}}}
+                    child{node  {\textbf{loop}}}
+                    child[color=white]{node  {}}
+                    child[color=white]{node  {}}
+                    child[color=white]{node  {}}
+                    child{node  {expr}
+                      child{node  {\textbf{ID}}
+                        child{node  {y}}}
+                      child{node  {$\leftarrow$}}
+                      child[color=white]{node  {$\leftarrow$}}
+                      child[color=white]{node  {$\leftarrow$}}
+                      child{node  {expr}
+                        child{node  {expr}
+                          child{node  {expr}
+                            child{node  {\textbf{ID}}
+                              child{node  {z}}}}
+                          child{node  {+}}
+                          child{node  {expr}
+                            child{node  {expr}
+                              child{node  {\textbf{integer}}
+                                child{node  {2}}}}
+                            child{node  {*}}
+                            child{node  {expr}
+                              child{node  {\textbf{ID}}
+                                child{node  {x}}}}
+                            }
+                          }
+                        child[color=white]{node  {+}}
+                        child{node  {+}}
+                        child{node  {expr}
+                          child{node  {\textbf{integer}}
+                            child{node  {1}}}}}}
+                    child{node  {\textbf{pool}}};
+                  \end{tikzpicture}
+                \end{array}
+            \]
+
+\newpage
+\item \pts{$4\times 4 =16$} Consider the following grammar describing a certain sort of nested lists:
+\[\begin{array}{cll}
+S & \rightarrow & T;S \mid \epsilon \\
+T & \rightarrow & U\star T \mid U \\
+U & \rightarrow & x\mid y\mid [S]
+\end{array}\]
+$S$, $T$, and $U$ are nonterminals, while others are terminals.
+\begin{enumerate}
+  \item Left-factor this grammar.
+               \[
+                \begin{array}{cll}
+                  S   &\rightarrow T;S \mid \epsilon      \\
+                  T   &\rightarrow UT'                    \\
+                  T'  &\rightarrow \star T \mid \epsilon  \\
+                  U   &\rightarrow x\mid y\mid [S]
+                \end{array}
+            \]
+  \item Give the First and Follow sets for each nonterminal in the grammar obtained in part (a).
+               \[
+            %% Your answer here
+            \begin{array}{cll}
+            FIRST(U)    &= \{x, y, [\}          \\
+            FIRST(T)    &= \{x, y, [\}          \\
+            FIRST(S)    &= \{x, y, [, \epsilon\}\\
+            FIRST(T')   &= \{\star, \epsilon\}  \\
+            \\
+            FOLLOW(S)   &= \{\$, ]\}    \\
+            FOLLOW(T)   &= \{;\}        \\
+            FOLLOW(T')  &= \{;\}        \\
+            FOLLOW(U)   &= \{;, \star\}  \\
+          \end{array}
+            \]
+  \item Using this information, construct an LL(1) parsing table for the grammar obtained in part (a).\\
+  \begin{table}[h!]
+    \centering
+      \begin{tabular}{|c|c|c|c|c|c|c|c|}
+          \hline
+          \multirow{2}{6em}{nonterminal}
+                              & \multicolumn{7}{|c|}{Input} \\
+          \cline{2-8}         & [ & ] & x & y & $\star$ & ; & \$  \\ \hline
+          $S$                 & $S \rightarrow T;S$ & $S \rightarrow \epsilon$ & $S \rightarrow T;S$ & $S \rightarrow T;S$ &  &  & $S \rightarrow \epsilon$  \\ \hline
+          $T$                 & $T \rightarrow UT'$ &  & $T \rightarrow UT'$ & $T \rightarrow UT'$ &  &  &  \\ \hline
+          $T'$                &  &  &  &  & $T' \rightarrow \star T$ & $T' \rightarrow \epsilon$ &  \\ \hline
+          $U$                 & $U\rightarrow[S]$ &  & $U\rightarrow x$ & $U\rightarrow y$ &  &  &  \\ \hline
+      \end{tabular}
+    \end{table}
+  \item Suppose we generated an LL(1) parser for the grammar using the table you constructed. What would go wrong if it tried to parse the following input string?
+  \[[x;y]\star [;\]
+               \[
+                \begin{array}{cll}
+                The \ error\ will\ occur\ at\ the\ time\ of\ inputting\ the\ last\ '$;$',\ which\ is\ in\\
+                the\ state\ $S$\ and\ the\ '$;$'\ is\ illegal.
+              \end{array}
+            \]
+\end{enumerate}
+
+\newpage
+\item \pts{$3\times 2+5\times 2 =16$} Consider the following CFG, which has the set of terminals
+$T = \{ \textbf{a}, \textbf{b} \}$.
+\[\begin{array}{cll}
+ S & \rightarrow & X \textbf{a} \\
+X & \rightarrow & \textbf{a} \mid \textbf{a} X \textbf{b}
+\end{array}\]
+
+\begin{enumerate}
+
+\item Construct a DFA for viable prefixes of this grammar using LR(0)
+items.\\
+          \[
+            %% Your answer here
+            \begin{tikzpicture}[shorten >=4pt]
+              \node[state] (I0) {
+                  \parbox{2cm}{
+                      \begin{align*}
+                          I_0: \
+                          & S' \rightarrow .S \\
+                          & S\rightarrow .Xa \\
+                          & X\rightarrow .a \\
+                          & X\rightarrow .aXb
+                      \end{align*}
+                  }
+              };
+          
+              \node[state, above right of=I0, node distance=4cm] (I1) {
+                  \parbox{2cm}{
+                      \begin{align*}
+                          I_1: \
+                          & S' \rightarrow S.
+                      \end{align*}
+                  }
+              };
+          
+              \node[state, right of=I1, node distance=5cm,accepting] (acc){
+                  \parbox{2cm}{
+                      \begin{align*}
+                          & accept
+                      \end{align*}
+                  }
+              };
+          
+              \node[state, right of=I0, node distance=5cm] (I2){
+                  \parbox{2cm}{
+                      \begin{align*}
+                          I_2: \
+                          & S\rightarrow X.a
+                      \end{align*}
+                  }
+              };
+          
+              \node[state, right of=I2, node distance=5cm] (I4){
+                  \parbox{2cm}{
+                      \begin{align*}
+                           I_4: \
+                          & S\rightarrow Xa.
+                      \end{align*}
+                  }
+              };
+          
+              \node[state, below right of=I0, node distance=6cm] (I3){
+                  \parbox{2cm}{
+                      \begin{align*}
+                          I_3: \
+                          & X\rightarrow a. \\
+                          & X\rightarrow a.Xb \\
+                          & X\rightarrow .a \\
+                          & X\rightarrow .aXb
+                      \end{align*}
+                  }
+              };
+          
+              \node[state, right of=I3, node distance=5cm] (I5){
+                  \parbox{2cm}{
+                      \begin{align*}
+                           I_5: \
+                          & X\rightarrow aX.b
+                      \end{align*}
+                  }
+              };
+          
+              \node[state, right of=I5, node distance=4cm] (I6){
+                  \parbox{2cm}{
+                      \begin{align*}
+                           I_6: \
+                          & X\rightarrow aXb.
+                      \end{align*}
+                  }
+              };
+          
+              \path[->]
+              (I0) 	edge 					node[above]{$X$} (I2)
+                      edge 	 	node[below]{$a$} (I3)
+                      edge 	 	node[above]{$S$} (I1)
+              (I1) 	edge 				 	node[above]{$\$$} (acc)
+              (I2) 	edge 					node[above]{$a$} (I4)
+              (I3) 	edge 	[loop left] 	node[above]{$a$} ()
+                      edge 					node[below]{$X$} (I5)
+              (I5) 	edge 					node[below]{$b$} (I6);
+          
+          \end{tikzpicture}
+            \]\\\\\\\\\\\\\\\\
+\item Identify a shift-reduce conflict in this grammar under the
+SLR(1) rules.\\
+            \begin{table}[h]
+              \centering
+              \begin{tabular}{c|ccc|cc}
+              \hline
+              \multirow{2}{*}{State} & \multicolumn{3}{c|}{Actions} & \multicolumn{2}{c}{Goto} \\ \cline{2-6}
+                                &  $a$  &  $b$  &  $\$$ &    $S$    &    $X$    \\ \hline
+                     0          &   s3  &       &       &     s1    &     s2    \\
+                     1          &       &       &  acc  &           &           \\
+                     2          &   s4  &       &       &           &           \\
+                     3          & \textbf{s3\ r2} &   r2  &       &           &     s5    \\
+                     4          &       &       &   r1  &           &           \\
+                     5          &       &   s6  &       &           &           \\
+                     6          &   r3  &   r3  &       &           &           \\ \hline
+              \end{tabular}
+              \end{table}
+              In the state $I_3$, we can either reduce $a$ to $X$ or keep shifting when $a$ is inputting.\\
+\item Assuming that an SLR(1) parser resolves shift-reduce conflicts
+by choosing to shift, show the operation of such a parser on the input
+string \textbf{aaba}.\\
+\begin{center}\begin{tabular}{l|r|l|l}
+  \textbf{Stack} & \textbf{Input} & \textbf{Action} & \textbf{Reason}\\
+  \$ & aaba\$ & shift &\\
+  \$a & aba\$ & shift &\\
+  \$aa & ba\$ & reduce & $X\rightarrow a$ \\
+  \$aX & ba\$ & shift &\\
+  \$aXb & a\$ & reduce & $X\rightarrow aXb$ \\
+  \$X & a\$ & shift &\\
+  \$Xa & \$ & reduce & $S\rightarrow Xa$ \\
+  \$S & \$ &  accept &\\
+  \end{tabular}\end{center}
+  \item Suppose that the production $X \rightarrow \varepsilon$ is added
+  to this grammar.  Identify a reduce-reduce conflict in the resulting
+  grammar under the SLR(1) rules.\\\\
+  In the state $I_3$, both operations reduce $a$ to $X$ or applying $X\rightarrow \epsilon$ is OK.\\  
+\end{enumerate}
+\end{enumerate}
+\end{document}
+

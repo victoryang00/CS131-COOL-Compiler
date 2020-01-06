@@ -1,0 +1,18 @@
+{
+	"folders": [
+		{
+			"path": "/Volumes/Download/Sophomore/DS/hw/algorithm"
+		},
+		{
+			"path": "/Volumes/Download/Sophomore/编译原理/compiler_hw"
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"list.h": "c",
+			"palloc.h": "c",
+			"vaddr.h": "c",
+			"filesys.h": "c"
+		}
+	}
+}

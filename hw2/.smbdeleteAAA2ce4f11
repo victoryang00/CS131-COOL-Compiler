@@ -1,0 +1,794 @@
+This is XeTeX, Version 3.14159265-2.6-0.999991 (TeX Live 2019) (preloaded format=xelatex 2019.9.12)  25 OCT 2019 07:09
+entering extended mode
+ restricted \write18 enabled.
+ file:line:error style messages enabled.
+ %&-line parsing enabled.
+**/Volumes/Download/Sophomore/编译原理/compiler_hw/hw2/WA2
+(/Volumes/Download/Sophomore/编译原理/compiler_hw/hw2/WA2.tex
+LaTeX2e <2018-12-01>
+(/usr/local/texlive/2019/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2018/09/03 v1.4i Standard LaTeX document class
+(/usr/local/texlive/2019/texmf-dist/tex/latex/base/size10.clo
+File: size10.clo 2018/09/03 v1.4i Standard LaTeX file (size option)
+)
+\c@part=\count80
+\c@section=\count81
+\c@subsection=\count82
+\c@subsubsection=\count83
+\c@paragraph=\count84
+\c@subparagraph=\count85
+\c@figure=\count86
+\c@table=\count87
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+) (/usr/local/texlive/2019/texmf-dist/tex/latex/graphics/graphicx.sty
+Package: graphicx 2017/06/01 v1.1a Enhanced LaTeX Graphics (DPC,SPQR)
+ (/usr/local/texlive/2019/texmf-dist/tex/latex/graphics/keyval.sty
+Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
+\KV@toks@=\toks14
+) (/usr/local/texlive/2019/texmf-dist/tex/latex/graphics/graphics.sty
+Package: graphics 2017/06/25 v1.2c Standard LaTeX Graphics (DPC,SPQR)
+ (/usr/local/texlive/2019/texmf-dist/tex/latex/graphics/trig.sty
+Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
+) (/usr/local/texlive/2019/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
+File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
+)
+Package graphics Info: Driver file: pdftex.def on input line 99.
+ (/usr/local/texlive/2019/texmf-dist/tex/latex/graphics-def/pdftex.def
+File: pdftex.def 2018/01/08 v1.0l Graphics/color driver for pdftex
+))
+\Gin@req@height=\dimen103
+\Gin@req@width=\dimen104
+) (/usr/local/texlive/2019/texmf-dist/tex/latex/graphics/color.sty
+Package: color 2016/07/10 v1.1e Standard LaTeX Color (DPC)
+ (/usr/local/texlive/2019/texmf-dist/tex/latex/graphics-cfg/color.cfg
+File: color.cfg 2016/01/02 v1.6 sample color configuration
+)
+Package color Info: Driver file: pdftex.def on input line 147.
+) (/usr/local/texlive/2019/texmf-dist/tex/latex/listings/listings.sty
+\lst@mode=\count88
+\lst@gtempboxa=\box27
+\lst@token=\toks15
+\lst@length=\count89
+\lst@currlwidth=\dimen105
+\lst@column=\count90
+\lst@pos=\count91
+\lst@lostspace=\dimen106
+\lst@width=\dimen107
+\lst@newlines=\count92
+\lst@lineno=\count93
+\lst@maxwidth=\dimen108
+ (/usr/local/texlive/2019/texmf-dist/tex/latex/listings/lstmisc.sty
+File: lstmisc.sty 2019/02/27 1.8b (Carsten Heinz)
+\c@lstnumber=\count94
+\lst@skipnumbers=\count95
+\lst@framebox=\box28
+) (/usr/local/texlive/2019/texmf-dist/tex/latex/listings/listings.cfg
+File: listings.cfg 2019/02/27 1.8b listings configuration
+))
+Package: listings 2019/02/27 1.8b (Carsten Heinz)
+ (/usr/local/texlive/2019/texmf-dist/tex/latex/pgf/frontendlayer/tikz.sty (/usr/local/texlive/2019/texmf-dist/tex/latex/pgf/basiclayer/pgf.sty (/usr/local/texlive/2019/texmf-dist/tex/latex/pgf/utilities/pgfrcs.sty (/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/utilities/pgfutil-common.tex
+\pgfutil@everybye=\toks16
+\pgfutil@tempdima=\dimen109
+\pgfutil@tempdimb=\dimen110
+ (/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/utilities/pgfutil-common-lists.tex)) (/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/utilities/pgfutil-latex.def
+\pgfutil@abb=\box29
+ (/usr/local/texlive/2019/texmf-dist/tex/latex/ms/everyshi.sty
+Package: everyshi 2001/05/15 v3.00 EveryShipout Package (MS)
+)) (/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/utilities/pgfrcs.code.tex (/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/pgf.revision.tex)
+Package: pgfrcs 2019/04/04 v3.1.2 (3.1.2)
+))
+Package: pgf 2019/04/04 v3.1.2 (3.1.2)
+ (/usr/local/texlive/2019/texmf-dist/tex/latex/pgf/basiclayer/pgfcore.sty (/usr/local/texlive/2019/texmf-dist/tex/latex/pgf/systemlayer/pgfsys.sty (/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsys.code.tex
+Package: pgfsys 2019/04/04 v3.1.2 (3.1.2)
+ (/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/utilities/pgfkeys.code.tex
+\pgfkeys@pathtoks=\toks17
+\pgfkeys@temptoks=\toks18
+ (/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/utilities/pgfkeysfiltered.code.tex
+\pgfkeys@tmptoks=\toks19
+))
+\pgf@x=\dimen111
+\pgf@y=\dimen112
+\pgf@xa=\dimen113
+\pgf@ya=\dimen114
+\pgf@xb=\dimen115
+\pgf@yb=\dimen116
+\pgf@xc=\dimen117
+\pgf@yc=\dimen118
+\w@pgf@writea=\write3
+\r@pgf@reada=\read1
+\c@pgf@counta=\count96
+\c@pgf@countb=\count97
+\c@pgf@countc=\count98
+\c@pgf@countd=\count99
+\t@pgf@toka=\toks20
+\t@pgf@tokb=\toks21
+\t@pgf@tokc=\toks22
+\pgf@sys@id@count=\count100
+ (/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgf.cfg
+File: pgf.cfg 2019/04/04 v3.1.2 (3.1.2)
+)
+Driver file for pgf: pgfsys-pdftex.def
+ (/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.def
+File: pgfsys-pdftex.def 2019/04/04 v3.1.2 (3.1.2)
+ (/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-common-pdf.def
+File: pgfsys-common-pdf.def 2019/04/04 v3.1.2 (3.1.2)
+)
+/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.def:424: Undefined control sequence.
+\pgf@sys@setuppdfresources@plain ->\pdfobj 
+                                           reserveobjnum \edef \pgf@sys@pdf@...
+l.424 \pgfutil@setuppdfresources
+                                 % possibly call the above
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+
+/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.def:424: LaTeX Error: Missing \begin{document}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.424 \pgfutil@setuppdfresources
+                                 % possibly call the above
+You're in trouble here.  Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.def:424: Undefined control sequence.
+\pgf@sys@setuppdfresources@plain ...e \pdflastobj 
+                                                  } \pdfobj reserveobjnum \e...
+l.424 \pgfutil@setuppdfresources
+                                 % possibly call the above
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.def:424: You can't use `end-group character }' after \the.
+\pgf@sys@setuppdfresources@plain ... \pdflastobj }
+                                                   \pdfobj reserveobjnum \ed...
+l.424 \pgfutil@setuppdfresources
+                                 % possibly call the above
+I'm forgetting what you said and using zero instead.
+
+/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.def:424: Undefined control sequence.
+\pgf@sys@setuppdfresources@plain ...obj } \pdfobj 
+                                                  reserveobjnum \edef \pgf@s...
+l.424 \pgfutil@setuppdfresources
+                                 % possibly call the above
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.def:424: Undefined control sequence.
+\pgf@sys@setuppdfresources@plain ...attern@objnum 
+                                                  {\the \pdflastobj } \pdfob...
+l.424 \pgfutil@setuppdfresources
+                                 % possibly call the above
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.def:424: Undefined control sequence.
+\pgf@sys@setuppdfresources@plain ...e \pdflastobj 
+                                                  } \pdfobj reserveobjnum \e...
+l.424 \pgfutil@setuppdfresources
+                                 % possibly call the above
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.def:424: You can't use `end-group character }' after \the.
+\pgf@sys@setuppdfresources@plain ... \pdflastobj }
+                                                   \pdfobj reserveobjnum \ed...
+l.424 \pgfutil@setuppdfresources
+                                 % possibly call the above
+I'm forgetting what you said and using zero instead.
+
+/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.def:424: Undefined control sequence.
+\pgf@sys@setuppdfresources@plain ...obj } \pdfobj 
+                                                  reserveobjnum \edef \pgf@s...
+l.424 \pgfutil@setuppdfresources
+                                 % possibly call the above
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.def:424: Undefined control sequence.
+\pgf@sys@setuppdfresources@plain ...spaces@objnum 
+                                                  {\the \pdflastobj } \def \...
+l.424 \pgfutil@setuppdfresources
+                                 % possibly call the above
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.def:424: Undefined control sequence.
+\pgf@sys@setuppdfresources@plain ...e \pdflastobj 
+                                                  } \def \pgf@sys@pdf@possib...
+l.424 \pgfutil@setuppdfresources
+                                 % possibly call the above
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.def:424: You can't use `end-group character }' after \the.
+\pgf@sys@setuppdfresources@plain ... \pdflastobj }
+                                                   \def \pgf@sys@pdf@possibl...
+l.424 \pgfutil@setuppdfresources
+                                 % possibly call the above
+I'm forgetting what you said and using zero instead.
+
+/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.def:424: Undefined control sequence.
+\pgf@sys@setuppdfresources@plain ...ble@resources 
+                                                  {/ColorSpace \pgf@sys@pdf@...
+l.424 \pgfutil@setuppdfresources
+                                 % possibly call the above
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.def:424: Undefined control sequence.
+\pgf@sys@setuppdfresources@plain ...spaces@objnum 
+                                                  \space 0 R /Pattern \pgf@s...
+l.424 \pgfutil@setuppdfresources
+                                 % possibly call the above
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.def:424: Undefined control sequence.
+\pgf@sys@setuppdfresources@plain ...attern@objnum 
+                                                  \space 0 R /ExtGState \pgf...
+l.424 \pgfutil@setuppdfresources
+                                 % possibly call the above
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.def:424: Undefined control sequence.
+\pgf@sys@setuppdfresources@plain ...@extgs@objnum 
+                                                  \space 0 R } \let \pgf@sys...
+l.424 \pgfutil@setuppdfresources
+                                 % possibly call the above
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.def:424: Undefined control sequence.
+\pgf@sys@setuppdfresources@plain ...eck@resources 
+                                                  =\relax \def \pgf@sys@pdf@...
+l.424 \pgfutil@setuppdfresources
+                                 % possibly call the above
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.def:424: Undefined control sequence.
+\pgf@sys@setuppdfresources@plain ...pageresources 
+                                                  { { \edef \temp { \pgf@sys...
+l.424 \pgfutil@setuppdfresources
+                                 % possibly call the above
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.def:424: Undefined control sequence.
+\pgf@sys@setuppdfresources@plain ...{ \edef \temp 
+                                                  { \pgf@sys@pdf@possible@re...
+l.424 \pgfutil@setuppdfresources
+                                 % possibly call the above
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.def:424: Undefined control sequence.
+\pgf@sys@setuppdfresources@plain ...ble@resources 
+                                                  } \expandafter \global \ex...
+l.424 \pgfutil@setuppdfresources
+                                 % possibly call the above
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.def:424: Undefined control sequence.
+\pgf@sys@setuppdfresources@plain ...dafter {\temp 
+                                                  } } } \pgf@sys@pdf@install...
+l.424 \pgfutil@setuppdfresources
+                                 % possibly call the above
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.def:424: Undefined control sequence.
+<recently read> \pdfpageresources 
+                                  
+l.424 \pgfutil@setuppdfresources
+                                 % possibly call the above
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.def:424: Undefined control sequence.
+\pgf@sys@setuppdfresources@plain ...pageresources 
+                                                  \expandafter \pgfutil@ever...
+l.424 \pgfutil@setuppdfresources
+                                 % possibly call the above
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.def:424: Undefined control sequence.
+\pgf@sys@setuppdfresources@plain ...diate \pdfobj 
+                                                  useobjnum \pgf@sys@pdf@ext...
+l.424 \pgfutil@setuppdfresources
+                                 % possibly call the above
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.def:424: Undefined control sequence.
+\pgf@sys@setuppdfresources@plain ...@extgs@objnum 
+                                                  {<<\pgf@sys@pgf@resource@l...
+l.424 \pgfutil@setuppdfresources
+                                 % possibly call the above
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.def:424: Undefined control sequence.
+\pgf@sys@setuppdfresources@plain ...ce@list@extgs 
+                                                  >>}\immediate \pdfobj useo...
+l.424 \pgfutil@setuppdfresources
+                                 % possibly call the above
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.def:424: Undefined control sequence.
+\pgf@sys@setuppdfresources@plain ...diate \pdfobj 
+                                                  useobjnum \pgf@sys@pdf@pat...
+l.424 \pgfutil@setuppdfresources
+                                 % possibly call the above
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.def:424: Undefined control sequence.
+\pgf@sys@setuppdfresources@plain ...attern@objnum 
+                                                  {<<\pgf@sys@pgf@resource@l...
+l.424 \pgfutil@setuppdfresources
+                                 % possibly call the above
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.def:424: Undefined control sequence.
+\pgf@sys@setuppdfresources@plain ...list@patterns 
+                                                  >>}\immediate \pdfobj useo...
+l.424 \pgfutil@setuppdfresources
+                                 % possibly call the above
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.def:424: Undefined control sequence.
+\pgf@sys@setuppdfresources@plain ...diate \pdfobj 
+                                                  useobjnum \pgf@sys@pdf@col...
+l.424 \pgfutil@setuppdfresources
+                                 % possibly call the above
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.def:424: Undefined control sequence.
+\pgf@sys@setuppdfresources@plain ...spaces@objnum 
+                                                  {<<\pgf@sys@pgf@resource@l...
+l.424 \pgfutil@setuppdfresources
+                                 % possibly call the above
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.def:424: Undefined control sequence.
+\pgf@sys@setuppdfresources@plain ...t@colorspaces 
+                                                  >>}} \let \pgf@sys@pgf@res...
+l.424 \pgfutil@setuppdfresources
+                                 % possibly call the above
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.def:424: Undefined control sequence.
+\pgf@sys@setuppdfresources@plain ...ce@list@extgs 
+                                                  =\pgfutil@empty \let \pgf@...
+l.424 \pgfutil@setuppdfresources
+                                 % possibly call the above
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.def:424: Undefined control sequence.
+\pgf@sys@setuppdfresources@plain ...list@patterns 
+                                                  =\pgfutil@empty \let \pgf@...
+l.424 \pgfutil@setuppdfresources
+                                 % possibly call the above
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.def:424: Undefined control sequence.
+\pgf@sys@setuppdfresources@plain ...t@colorspaces 
+                                                  =\pgfutil@empty \def \pgf@...
+l.424 \pgfutil@setuppdfresources
+                                 % possibly call the above
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.def:424: Undefined control sequence.
+\pgf@sys@setuppdfresources@plain ...e@extgs@plain 
+                                                  ##1{\xdef \pgf@sys@pgf@res...
+l.424 \pgfutil@setuppdfresources
+                                 % possibly call the above
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.def:424: Illegal parameter number in definition of \pgf@sys@pdf@extgs@objnum.
+<to be read again> 
+                   1
+l.424 \pgfutil@setuppdfresources
+                                 % possibly call the above
+You meant to type ## instead of #, right?
+Or maybe a } was forgotten somewhere earlier, and things
+are all screwed up? I'm going to assume that you meant ##.
+
+/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.def:424: Undefined control sequence.
+\pgf@sys@setuppdfresources@plain ...ce@list@extgs 
+                                                  {\pgf@sys@pgf@resource@lis...
+l.424 \pgfutil@setuppdfresources
+                                 % possibly call the above
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.def:424: Undefined control sequence.
+\pgf@sys@setuppdfresources@plain ...ce@list@extgs 
+                                                  \space ##1}} \def \pgf@sys...
+l.424 \pgfutil@setuppdfresources
+                                 % possibly call the above
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.def:424: Illegal parameter number in definition of \pgf@sys@pdf@extgs@objnum.
+<to be read again> 
+                   1
+l.424 \pgfutil@setuppdfresources
+                                 % possibly call the above
+You meant to type ## instead of #, right?
+Or maybe a } was forgotten somewhere earlier, and things
+are all screwed up? I'm going to assume that you meant ##.
+
+/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.def:424: Undefined control sequence.
+\pgf@sys@setuppdfresources@plain ...atterns@plain 
+                                                  ##1{\xdef \pgf@sys@pgf@res...
+l.424 \pgfutil@setuppdfresources
+                                 % possibly call the above
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.def:424: Illegal parameter number in definition of \pgf@sys@pdf@extgs@objnum.
+<to be read again> 
+                   1
+l.424 \pgfutil@setuppdfresources
+                                 % possibly call the above
+You meant to type ## instead of #, right?
+Or maybe a } was forgotten somewhere earlier, and things
+are all screwed up? I'm going to assume that you meant ##.
+
+/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.def:424: Undefined control sequence.
+\pgf@sys@setuppdfresources@plain ...list@patterns 
+                                                  {\pgf@sys@pgf@resource@lis...
+l.424 \pgfutil@setuppdfresources
+                                 % possibly call the above
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.def:424: Undefined control sequence.
+\pgf@sys@setuppdfresources@plain ...list@patterns 
+                                                  \space ##1}} \def \pgf@sys...
+l.424 \pgfutil@setuppdfresources
+                                 % possibly call the above
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.def:424: Illegal parameter number in definition of \pgf@sys@pdf@extgs@objnum.
+<to be read again> 
+                   1
+l.424 \pgfutil@setuppdfresources
+                                 % possibly call the above
+You meant to type ## instead of #, right?
+Or maybe a } was forgotten somewhere earlier, and things
+are all screwed up? I'm going to assume that you meant ##.
+
+/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.def:424: Undefined control sequence.
+\pgf@sys@setuppdfresources@plain ...rspaces@plain 
+                                                  ##1{\xdef \pgf@sys@pgf@res...
+l.424 \pgfutil@setuppdfresources
+                                 % possibly call the above
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.def:424: Illegal parameter number in definition of \pgf@sys@pdf@extgs@objnum.
+<to be read again> 
+                   1
+l.424 \pgfutil@setuppdfresources
+                                 % possibly call the above
+You meant to type ## instead of #, right?
+Or maybe a } was forgotten somewhere earlier, and things
+are all screwed up? I'm going to assume that you meant ##.
+
+/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.def:424: Undefined control sequence.
+\pgf@sys@setuppdfresources@plain ...t@colorspaces 
+                                                  {\pgf@sys@pgf@resource@lis...
+l.424 \pgfutil@setuppdfresources
+                                 % possibly call the above
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.def:424: Undefined control sequence.
+\pgf@sys@setuppdfresources@plain ...t@colorspaces 
+                                                  \space ##1}} 
+l.424 \pgfutil@setuppdfresources
+                                 % possibly call the above
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.def:424: Illegal parameter number in definition of \pgf@sys@pdf@extgs@objnum.
+<to be read again> 
+                   1
+l.424 \pgfutil@setuppdfresources
+                                 % possibly call the above
+You meant to type ## instead of #, right?
+Or maybe a } was forgotten somewhere earlier, and things
+are all screwed up? I'm going to assume that you meant ##.
+
+/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.def:426: Undefined control sequence.
+\pgfutil@addpdfresource@colorspaces ...aces@plain 
+                                                  {#1}
+l.426 ...rspaces{ /pgfprgb [/Pattern /DeviceRGB] }
+                                                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.def:429: Undefined control sequence.
+l.429     \pdfliteral
+                     {\csname\string\color@#1\endcsname}%
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+)
+Runaway definition?
+->0 reserveobjnum \edef {0 reserveobjnum \edef {0 \def {/ColorSpace  \ETC.
+/usr/local/texlive/2019/texmf-dist/tex/generic/pgf/systemlayer/pgfsys.code.tex:1725: File ended while scanning definition of \pgf@sys@pdf@extgs@objnum.
+<inserted text> 
+                }
+l.1725 ...iver file ``\pgfsysdriver'' not found.}}
+                                                  
+I suspect you have forgotten a `}', causing me
+to read past where you wanted me to stop.
+I'll try to recover; but if the error is serious,
+you'd better type `E' or `X' now and fix your file.
+
+)
+/usr/local/texlive/2019/texmf-dist/tex/latex/pgf/systemlayer/pgfsys.sty:16: Incomplete \iffalse; all text was ignored after line 1734.
+<inserted text> 
+                \fi 
+l.16 \input{pgfsys.code.tex}
+                            
+The file ended while I was skipping conditional text.
+This kind of error happens when you say `\if...' and forget
+the matching `\fi'. I've inserted a `\fi'; this might work.
+
+)
+/usr/local/texlive/2019/texmf-dist/tex/latex/pgf/basiclayer/pgfcore.sty:12: Incomplete \iffalse; all text was ignored after line 1734.
+<inserted text> 
+                \fi 
+l.12 \RequirePackage
+                    {keyval}
+The file ended while I was skipping conditional text.
+This kind of error happens when you say `\if...' and forget
+the matching `\fi'. I've inserted a `\fi'; this might work.
+
+)
+/usr/local/texlive/2019/texmf-dist/tex/latex/pgf/basiclayer/pgf.sty:29: Incomplete \iffalse; all text was ignored after line 1734.
+<inserted text> 
+                \fi 
+l.29 
+     
+The file ended while I was skipping conditional text.
+This kind of error happens when you say `\if...' and forget
+the matching `\fi'. I've inserted a `\fi'; this might work.
+
+/usr/local/texlive/2019/texmf-dist/tex/latex/pgf/basiclayer/pgf.sty:29: Undefined control sequence.
+<argument> \@nil 
+                 
+l.29 
+     
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+)
+Runaway argument?
+\@nil \@@ \CurrentOption {\ifx \CurrentOption \@empty \else \@unknownoptionerror \ETC.
+/usr/local/texlive/2019/texmf-dist/tex/latex/pgf/frontendlayer/tikz.sty:12: File ended while scanning use of \@iforloop.
+<inserted text> 
+                \par 
+l.12 
+     
+I suspect you have forgotten a `}', causing me
+to read past where you wanted me to stop.
+I'll try to recover; but if the error is serious,
+you'd better type `E' or `X' now and fix your file.
+
+/usr/local/texlive/2019/texmf-dist/tex/latex/pgf/frontendlayer/tikz.sty:12: Undefined control sequence.
+<argument> \@nil 
+                 
+l.12 
+     
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+)
+Runaway argument?
+\@nil \@@ \CurrentOption {\ifx \CurrentOption \@empty \else \@unknownoptionerror \ETC.
+/Volumes/Download/Sophomore/编译原理/compiler_hw/hw2/WA2.tex:6: File ended while scanning use of \@iforloop.
+<inserted text> 
+                \par 
+l.6 \usetikzlibrary
+                   {automata,positioning}
+I suspect you have forgotten a `}', causing me
+to read past where you wanted me to stop.
+I'll try to recover; but if the error is serious,
+you'd better type `E' or `X' now and fix your file.
+
+/Volumes/Download/Sophomore/编译原理/compiler_hw/hw2/WA2.tex:6: Undefined control sequence.
+<argument> \@nil 
+                 
+l.6 \usetikzlibrary
+                   {automata,positioning}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+)
+Runaway argument?
+ October 31, 2019 at 23:59 \end {center} \par \begin {center} \LARGE \ETC.
+! File ended while scanning use of \@iforloop.
+<inserted text> 
+                \par 
+<*> ...Download/Sophomore/编译原理/compiler_hw/hw2/WA2
+                                                  
+I suspect you have forgotten a `}', causing me
+to read past where you wanted me to stop.
+I'll try to recover; but if the error is serious,
+you'd better type `E' or `X' now and fix your file.
+
+! Emergency stop.
+<*> ...Download/Sophomore/编译原理/compiler_hw/hw2/WA2
+                                                  
+*** (job aborted, no legal \end found)
+
+ 
+Here is how much of TeX's memory you used:
+ 2912 strings out of 492916
+ 51683 string characters out of 6133345
+ 116122 words of memory out of 5000000
+ 6960 multiletter control sequences out of 15000+600000
+ 3648 words of font info for 15 fonts, out of 8000000 for 9000
+ 1348 hyphenation exceptions out of 8191
+ 55i,0n,44p,401b,217s stack positions out of 5000i,500n,10000p,200000b,80000s
+No pages of output.
